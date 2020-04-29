@@ -1,0 +1,28 @@
+
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "images-export", "images-export\images-export.csproj", "{95631BAD-E2F4-4F65-8393-F8FEC701295E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "images-collect", "images-collect\images-collect.csproj", "{F68D02C4-00B0-4206-8FA2-1DA9B0235565}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C3470CD9-5D3A-45C5-AEB9-23712481AEA4}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|anycpu = Debug|anycpu
+		Release|anycpu = Release|anycpu
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{95631BAD-E2F4-4F65-8393-F8FEC701295E}.Debug|anycpu.ActiveCfg = Debug|anycpu
+		{95631BAD-E2F4-4F65-8393-F8FEC701295E}.Debug|anycpu.Build.0 = Debug|anycpu
+		{95631BAD-E2F4-4F65-8393-F8FEC701295E}.Release|anycpu.ActiveCfg = Release|anycpu
+		{95631BAD-E2F4-4F65-8393-F8FEC701295E}.Release|anycpu.Build.0 = Release|anycpu
+		{F68D02C4-00B0-4206-8FA2-1DA9B0235565}.Debug|anycpu.ActiveCfg = Debug|anycpu
+		{F68D02C4-00B0-4206-8FA2-1DA9B0235565}.Debug|anycpu.Build.0 = Debug|anycpu
+		{F68D02C4-00B0-4206-8FA2-1DA9B0235565}.Release|anycpu.ActiveCfg = Release|anycpu
+		{F68D02C4-00B0-4206-8FA2-1DA9B0235565}.Release|anycpu.Build.0 = Release|anycpu
+	EndGlobalSection
+EndGlobal
