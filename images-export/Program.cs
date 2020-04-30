@@ -21,7 +21,6 @@ namespace S21eimagesexport
             {
                 string fileName = Path.GetFileName(path);
 
-
                 if (IsImage(Path.GetExtension(fileName)))
                 {
                     string sku = fileName.Split('_')[0];
@@ -92,6 +91,11 @@ namespace S21eimagesexport
             WriteToFile(fileToWrite, importObj);
         }
 
+        /// <summary>
+        /// Controllo se è un'immagine
+        /// </summary>
+        /// <param name="ext"></param>
+        /// <returns></returns>
         public static bool IsImage(string ext)
         {
             List<string> imagesTypes = new List<string> {
@@ -105,6 +109,11 @@ namespace S21eimagesexport
             return imagesTypes.Contains(ext.ToLower());
         }
 
+        /// <summary>
+        /// Scrivo nel file
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <param name="importObj"></param>
         private static void WriteToFile(string filename, Import importObj)
         {
             XmlSerializer x = new XmlSerializer(typeof(Import));
