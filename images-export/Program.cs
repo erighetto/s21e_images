@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Xml.Serialization;
 using S21eimagesexport.Model;
 
 namespace S21eimagesexport
@@ -19,9 +20,13 @@ namespace S21eimagesexport
             foreach (string path in fileEntries)
             {
                 string fileName = Path.GetFileName(path);
+
+
                 if (IsImage(Path.GetExtension(fileName)))
                 {
                     string sku = fileName.Split('_')[0];
+
+                    Console.WriteLine("Sku: {0} - File: {1}", sku, fileName);
 
                     List<string> RoleList = new List<string> {
                           "base_image",
@@ -68,12 +73,23 @@ namespace S21eimagesexport
                            img
                         };
                     }
-
-                    importObj.Simple.Add(newObj);
-
+                    if (importObj.Simple is object)
+                    {
+                        importObj.Simple.Add(newObj);
+                    } else
+                    {
+                        importObj.Simple = new List<Simple>
+                        {
+                            newObj
+                        };
+                    }
 
                 }
             }
+
+            string fileToWrite = Path.Combine(Path.GetDirectoryName(targetDirectory), "export-articoli.xml");
+
+            WriteToFile(fileToWrite, importObj);
         }
 
         public static bool IsImage(string ext)
@@ -87,6 +103,13 @@ namespace S21eimagesexport
             };
 
             return imagesTypes.Contains(ext.ToLower());
+        }
+
+        private static void WriteToFile(string filename, Import importObj)
+        {
+            XmlSerializer x = new XmlSerializer(typeof(Import));
+            TextWriter writer = new StreamWriter(filename, false);
+            x.Serialize(writer, importObj);
         }
 
     }
