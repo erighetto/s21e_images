@@ -5,11 +5,24 @@ using System.Collections.Generic;
 namespace S21eimagesexport.Model
 {
 
+	[XmlRoot(ElementName = "gallery_information")]
+	public class GalleryInformation
+	{
+		[XmlAttribute(AttributeName = "label")]
+		public string Label { get; set; }
+		[XmlAttribute(AttributeName = "position")]
+		public string Position { get; set; }
+		[XmlAttribute(AttributeName = "enabled")]
+		public string Enabled { get; set; }
+	}
+
 	[XmlRoot(ElementName = "global")]
 	public class Global
 	{
 		[XmlElement(ElementName = "role")]
 		public List<string> Role { get; set; }
+		[XmlElement(ElementName = "gallery_information")]
+		public GalleryInformation GalleryInformation { get; set; }
 	}
 
 	[XmlRoot(ElementName = "image")]
@@ -19,6 +32,8 @@ namespace S21eimagesexport.Model
 		public Global Global { get; set; }
 		[XmlAttribute(AttributeName = "file_or_url")]
 		public string FileOrUrl { get; set; }
+		[XmlElement(ElementName = "gallery_information")]
+		public GalleryInformation GalleryInformation { get; set; }
 	}
 
 	[XmlRoot(ElementName = "images")]
@@ -41,7 +56,7 @@ namespace S21eimagesexport.Model
 	public class Import
 	{
 		[XmlElement(ElementName = "simple")]
-		public Simple Simple { get; set; }
+		public List<Simple> Simple { get; set; }
 	}
 
 }

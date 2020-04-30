@@ -5,8 +5,8 @@
     <Platform Condition=" '$(Platform)' == '' ">anycpu</Platform>
     <ProjectGuid>{95631BAD-E2F4-4F65-8393-F8FEC701295E}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>s21eimages</RootNamespace>
-    <AssemblyName>s21e-images</AssemblyName>
+    <RootNamespace>S21eimagesexport</RootNamespace>
+    <AssemblyName>s21e-images-export</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|anycpu' ">
