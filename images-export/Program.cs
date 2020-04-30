@@ -28,14 +28,14 @@ namespace S21eimagesexport
                     Console.WriteLine("Sku: {0} - File: {1}", sku, fileName);
 
                     List<string> RoleList = new List<string> {
-                          "base_image",
+                          "image",
                           "small_image",
-                          "thumbnail_image"
+                          "thumbnail"
                     };
 
                     Image img = new Image
                     {
-                        FileOrUrl = fileName,
+                        FileOrUrl = "var/import/product_images/" + fileName,
                         Global = new Global()
                     };
                     img.Global.Role = RoleList;
