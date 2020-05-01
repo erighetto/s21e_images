@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace S21eimagescollect
 {
@@ -168,6 +167,7 @@ namespace S21eimagescollect
         {
             if (reader.TokenType == JsonToken.Null) return null;
             var value = serializer.Deserialize<string>(reader);
+            value = value.Replace(",", "").Replace(".", "");
             if (Int64.TryParse(value, out long l))
             {
                 return l;

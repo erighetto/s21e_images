@@ -6,6 +6,10 @@ using S21eimagescollect.Model;
 using S21eimagescollect.Service;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Threading;
+using System.Net;
+using System.Drawing;
+using System.Drawing.Imaging;
 
 namespace S21eimagescollect
 {
@@ -42,24 +46,60 @@ namespace S21eimagescollect
                             { "imgSize", "large" }
                         };
 
-                        string response = googleImagesClient.FindImages(options);
 
-                        Search imagesObj = JsonConvert.DeserializeObject<Search>(response);
-
-                        if (imagesObj.Items is object)
+                        try
                         {
-                            foreach (Item item in imagesObj.Items)
+                            string response = googleImagesClient.FindImages(options);
+
+                            Search imagesObj = JsonConvert.DeserializeObject<Search>(response);
+
+                            if (imagesObj.Items is object)
                             {
-                                Console.WriteLine(item.Link.ToString());
+                                int i = 0;
+                                foreach (Item item in imagesObj.Items)
+                                {
+                                    if (i >= 3)
+                                        break;
+
+                                    Console.WriteLine(item.Link.ToString());
+
+                                    SaveImage(item.Link.ToString(), sku + "_" + i + ".jpg", ImageFormat.Jpeg);
+
+                                    i++;
+                                }
                             }
                         }
-
+                        catch (Exception e)
+                        {
+                            Console.WriteLine("{0} Exception caught.", e);
+                        } finally
+                        {
+                            Thread.Sleep(3000);
+                        }
 
                     }
                 }
 
             }
             
+        }
+
+        public static void SaveImage(string imageUrl, string filename, ImageFormat format)
+        {
+            WebClient client = new WebClient();
+            Stream stream = client.OpenRead(imageUrl);
+            Bitmap bitmap = new Bitmap(stream);
+
+            if (bitmap != null)
+            {
+                string conf = ConfigurationManager.AppSettings["AssetsPath"];
+                string pathToFile = Path.Combine(Path.GetDirectoryName(conf), filename);
+                bitmap.Save(pathToFile, format);
+            }
+
+            stream.Flush();
+            stream.Close();
+            client.Dispose();
         }
     }
 }
