@@ -9,3 +9,10 @@
     ORDER BY TRIM(p.CodArt);
 
 ## images export
+
+Generate the xml for importing products
+
+
+## images refine
+
+Kind of web scraper

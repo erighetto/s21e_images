@@ -3,6 +3,7 @@ using System.Linq;
 using HtmlAgilityPack;
 using ScrapySharp.Extensions;
 using ScrapySharp.Html;
+using ScrapySharp.Html.Forms;
 using ScrapySharp.Network;
 
 namespace S21eimagesrefine
@@ -11,18 +12,37 @@ namespace S21eimagesrefine
     {
         public static void Main(string[] args)
         {
+            /**
+             * Esempio 1
+             */
             ScrapingBrowser browser = new ScrapingBrowser();
 
-            //set UseDefaultCookiesParser as false if a website returns invalid cookies format
-            //browser.UseDefaultCookiesParser = false;
+            WebPage homePage = browser.NavigateToPage(new Uri("http://www.bing.com/"));
 
-            WebPage resultsPage = browser.NavigateToPage(new Uri("https://www.cosicomodo.it/spesa-online/ricerca?q=8000500227848&empty-cookie=true"));
+            PageWebForm form = homePage.FindFormById("sb_form");
+            form["q"] = "scrapysharp";
+            form.Method = HttpVerb.Get;
+            WebPage resultsPage = form.Submit();
 
-            HtmlNode[] resultsLinks = resultsPage.Html.CssSelect("div.filters-result ul li article div.info h3 a").ToArray();
+            HtmlNode[] resultsLinks = resultsPage.Html.CssSelect("div.sb_tlst h3 a").ToArray();
 
-            WebPage productPage = resultsPage.FindLinks(By.Text("nutella B-ready 6 x 22 g")).Single().Click();
+            WebPage blogPage = resultsPage.FindLinks(By.Text("romcyber blog | Just another WordPress site")).Single().Click();
 
-            Console.WriteLine("Hello World!");
+
+            /**
+             * Esempio 2
+             */
+            var url = "https://www.cosicomodo.it/spesa-online/ricerca?q=8000500227848&empty-cookie=true";
+            var webGet = new HtmlWeb();
+            if (webGet.Load(url) is HtmlDocument document)
+            {
+                var nodes = document.DocumentNode.CssSelect("ul.listing li").ToList();
+                foreach (var node in nodes)
+                {
+                    Console.WriteLine("Articolo: " + node.CssSelect("h3 a").Single().InnerText);
+                }
+            }
+
         }
     }
 }

@@ -93,7 +93,7 @@ namespace S21eimagescollect
             if (bitmap != null)
             {
                 string conf = ConfigurationManager.AppSettings["AssetsPath"];
-                string pathToFile = Path.Combine(Path.GetDirectoryName(conf), filename);
+                string pathToFile = Path.Combine(Path.GetDirectoryName(conf), "product_images/" + filename);
                 bitmap.Save(pathToFile, format);
             }
 

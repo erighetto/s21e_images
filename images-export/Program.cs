@@ -35,7 +35,7 @@ namespace S21eimagesexport
 
                     Image img = new Image
                     {
-                        FileOrUrl = "var/import/product_images/" + fileName,
+                        FileOrUrl = "product_images/" + fileName,
                         Global = new Global()
                     };
                     img.Global.Role = RoleList;
