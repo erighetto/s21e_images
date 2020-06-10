@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace S21eimagescollect.Model
+namespace S21emodellayer.Model
 {
 
     public partial class Tblarticoli

@@ -12,6 +12,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "images-refine", "images-refine\images-refine.csproj", "{157CBB7C-743B-456C-B9CF-38270C654331}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "model-layer", "model-layer\model-layer.csproj", "{41A8B4F9-AF46-41A2-8E50-DAEBEEFA5FF5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|anycpu = Debug|anycpu
@@ -30,5 +32,9 @@ Global
 		{157CBB7C-743B-456C-B9CF-38270C654331}.Debug|anycpu.Build.0 = Debug|anycpu
 		{157CBB7C-743B-456C-B9CF-38270C654331}.Release|anycpu.ActiveCfg = Release|anycpu
 		{157CBB7C-743B-456C-B9CF-38270C654331}.Release|anycpu.Build.0 = Release|anycpu
+		{41A8B4F9-AF46-41A2-8E50-DAEBEEFA5FF5}.Debug|anycpu.ActiveCfg = Debug|Any CPU
+		{41A8B4F9-AF46-41A2-8E50-DAEBEEFA5FF5}.Debug|anycpu.Build.0 = Debug|Any CPU
+		{41A8B4F9-AF46-41A2-8E50-DAEBEEFA5FF5}.Release|anycpu.ActiveCfg = Release|Any CPU
+		{41A8B4F9-AF46-41A2-8E50-DAEBEEFA5FF5}.Release|anycpu.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
