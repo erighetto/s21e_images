@@ -16,3 +16,7 @@ Generate the xml for importing products
 ## images refine
 
 Kind of web scraper
+
+    SELECT TRIM(a.sku) FROM catalog_product_entity AS a 
+    LEFT JOIN catalog_product_entity_media_gallery_value AS b ON a.entity_id = b.entity_id 
+    LEFT JOIN catalog_product_entity_media_gallery AS c ON b.value_id = c.value_id WHERE c.value IS NULL;
