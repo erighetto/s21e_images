@@ -114,7 +114,7 @@ namespace S21eimagesrefine
                         for (int i = 0; i < images.Count() && i < 5; i++)
                         {
                             string image = images.ElementAt(i).GetAttribute("href");
-                            if (!string.IsNullOrEmpty(ean))
+                            if (!string.IsNullOrEmpty(image))
                             {
                                 Console.WriteLine(image);
                                 SaveImage(image, sku + "_" + i + ".jpg", ImageFormat.Jpeg);
@@ -144,13 +144,22 @@ namespace S21eimagesrefine
         {
             WebClient client = new WebClient();
             Stream stream = client.OpenRead(imageUrl);
-            Bitmap bitmap = new Bitmap(stream);
+            Image image = Image.FromStream(stream);
 
-            if (bitmap != null)
+            if (image != null)
             {
                 string conf = ConfigurationManager.AppSettings["AssetsPath"];
                 string pathToFile = Path.Combine(Path.GetDirectoryName(conf), "product_images/" + filename);
-                bitmap.Save(pathToFile, format);
+
+                if (ImageFormat.Jpeg.Equals(image.RawFormat))
+                {
+                    image.Save(pathToFile, format);
+
+                }
+                else
+                {
+                    image.Save(pathToFile.Replace(".jpg",".png"), ImageFormat.Png);
+                }
             }
 
             stream.Flush();
