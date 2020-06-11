@@ -93,8 +93,18 @@ namespace S21eimagesrefine
                         driver.Navigate().GoToUrl(searchPageUrl);
                         IWebElement firstResult = wait.Until(ExpectedConditions.ElementExists(By.CssSelector(".large-10 .listing")));
                         IList<IWebElement> links = firstResult.FindElements(By.TagName("a"));
+
+                        if (links.Count() < 1)
+                        {
+                            continue;
+                        }
+
                         IWebElement link = links.First(e => e.GetAttribute("href") != "#");
                         string productPageUrl = link.GetAttribute("href");
+                        if (string.IsNullOrEmpty(productPageUrl))
+                        {
+                            continue;
+                        }
                         Console.WriteLine(productPageUrl);
 
                         driver.Navigate().GoToUrl(productPageUrl);
@@ -104,8 +114,12 @@ namespace S21eimagesrefine
                         for (int i = 0; i < images.Count() && i < 5; i++)
                         {
                             string image = images.ElementAt(i).GetAttribute("href");
-                            Console.WriteLine(image);
-                            SaveImage(image, sku + "_" + i + ".jpg", ImageFormat.Jpeg);
+                            if (!string.IsNullOrEmpty(ean))
+                            {
+                                Console.WriteLine(image);
+                                SaveImage(image, sku + "_" + i + ".jpg", ImageFormat.Jpeg);
+                            }
+                            
                         }
 
                     }
