@@ -16,7 +16,7 @@ namespace S21eimagesexport
 
             Import importObj = new Import();
 
-            string[] fileEntries = Directory.GetFiles(targetDirectory);
+            string[] fileEntries = Directory.GetFiles(Path.Combine(targetDirectory, "product_images"));
             foreach (string path in fileEntries)
             {
                 string fileName = Path.GetFileName(path);
@@ -86,7 +86,7 @@ namespace S21eimagesexport
                 }
             }
 
-            string fileToWrite = Path.Combine(Path.GetDirectoryName(targetDirectory), "export-articoli.xml");
+            string fileToWrite = Path.Combine(targetDirectory, "export-articoli.xml");
 
             WriteToFile(fileToWrite, importObj);
         }
