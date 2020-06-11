@@ -31,6 +31,7 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Model\CatalogProductEntities.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -52,16 +53,11 @@
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="app.config" />
-    <None Include="Data\tblarticolo.json" />
+    <None Include="Data\catalog_product_entity.json" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Data\" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\model-layer\model-layer.csproj">
-      <Project>{41A8B4F9-AF46-41A2-8E50-DAEBEEFA5FF5}</Project>
-      <Name>model-layer</Name>
-    </ProjectReference>
+    <Folder Include="Model\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Selenium.WebDriver.GeckoDriver.0.26.0.1\build\Selenium.WebDriver.GeckoDriver.targets" Condition="Exists('..\packages\Selenium.WebDriver.GeckoDriver.0.26.0.1\build\Selenium.WebDriver.GeckoDriver.targets')" />

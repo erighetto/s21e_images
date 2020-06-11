@@ -42,6 +42,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service\**.*" />
     <Compile Include="Model\Search.cs" />
+    <Compile Include="Model\Tblarticoli.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -49,12 +50,6 @@
     <None Include="Model**.*" />
     <None Include="Data\**.*" />
     <None Include="Service\**.*" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\model-layer\model-layer.csproj">
-      <Project>{41A8B4F9-AF46-41A2-8E50-DAEBEEFA5FF5}</Project>
-      <Name>model-layer</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

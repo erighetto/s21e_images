@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.Support.UI;
 using OpenQA.Selenium;
-using S21emodellayer.Model;
+using S21eimagesrefine.Model;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Drawing.Imaging;
@@ -24,7 +24,7 @@ namespace S21eimagesrefine
         {
 
             string conf = ConfigurationManager.AppSettings["DataPath"];
-            string path = Path.Combine(Path.GetDirectoryName(conf), "tblarticolo.json");
+            string path = Path.Combine(Path.GetDirectoryName(conf), "catalog_product_entity.json");
             string json = File.ReadAllText(path);
             DateTime time = new DateTime(2020, 12, 31, 23, 02, 03);
 
@@ -43,7 +43,7 @@ namespace S21eimagesrefine
 
                     driver.Manage().Cookies.AddCookie(new Cookie(
                         "rbzid",
-                        "LuK8CpFtsds0UnWPg0Yq9Ajh62mCOZM12MgGHtsLSm2+jrrFMpd9u2G4Nuva4Gycg00ESYOyUdUK0uY4+ZvJ39ge/iQgsN+IcdcCA8ZQIP5pM3FSd9OH/cprOzPj9DmPBYROuNlkC5DZ3u/WAz3439SBTMYMKtcAtgt9EjSFUk5IgFWpT/Q7tlvZq+eoa3JSVbCAzYsOKXartcYVDn6s65IZCcYcfjKYi4A11/X/EJnsciyMv4eYGysJzGhpxH9R",
+                        "LuK8CpFtsds0UnWPg0Yq9EaAAHfZyg8Rp9pNSaztL/Wf0as4oMMmVeLQJYd9dhck0yVRT95O7IgTCJZdF7eH5PGiegm1qPcARfXoFe5fnOQUzbqWm8btdCPlIvd8bBr/Vu8f+1VjkMK/dIJi+4odVe1c5xj8DwfPMU8TQeAHn03NhJCDL4Bs0iCr0DyMhfYtXe+Ptfvt/dc7cZVFKFs3qdcOre3+PZx4LftsqjQTpdeJBVHEdN9z6uj58SAbM/n7F/7vdv3OOaKoNdc75IY6xA==",
                         ".www.cosicomodo.it",
                         "/",
                         time
@@ -65,50 +65,55 @@ namespace S21eimagesrefine
                         time
                     ));
 
+                    driver.Manage().Cookies.AddCookie(new Cookie(
+                        "cookies-disclaimer-v1",
+                        "true",
+                        "www.cosicomodo.it",
+                        "/",
+                        time
+                    ));
 
-                    List<Tblarticoli> tblarticoliList = JsonConvert.DeserializeObject<List<Tblarticoli>>(json);
 
-                    foreach (Tblarticoli tblarticoliObj in tblarticoliList)
+                    CatalogProductEntities tblarticoliObj = JsonConvert.DeserializeObject<CatalogProductEntities>(json);
+
+                    foreach (CatalogProductEntity element in tblarticoliObj.CatalogProductEntity)
                     {
-                        if (tblarticoliObj.Type == "table")
+                        var sku = element.CodArt;
+                        var ean = element.CodEan;
+                        var descr = element.DescArticolo;
+                        if (string.IsNullOrEmpty(ean))
                         {
-                            foreach (Datum element in tblarticoliObj.Data)
-                            {
-                                var sku = element.CodArt;
-                                var ean = element.CodEan;
-                                var descr = element.DescArticolo;
-                                string searchPageUrl = $"https://www.cosicomodo.it/spesa-online/ricerca?q={ean}";
-                                Console.WriteLine($"Articolo #{sku}: {descr}");
-
-
-                                driver.Navigate().GoToUrl(searchPageUrl);
-                                IWebElement firstResult = wait.Until(ExpectedConditions.ElementExists(By.CssSelector(".large-10 .listing")));
-                                IList<IWebElement> links = firstResult.FindElements(By.TagName("a"));
-                                IWebElement link = links.First(e => e.GetAttribute("href") != "#");
-                                string productPageUrl = link.GetAttribute("href");
-                                Console.WriteLine(productPageUrl);
-
-                                driver.Navigate().GoToUrl(productPageUrl);
-                                IWebElement secondResult = wait.Until(ExpectedConditions.ElementExists(By.CssSelector(".image-container")));
-                                IList<IWebElement> images = secondResult.FindElements(By.CssSelector(".image-container .slick-slide a.mfp-zoom"));
-
-                                for (int i = 0; i < images.Count(); i++)
-                                {
-                                    string image = images.ElementAt(i).GetAttribute("href");
-                                    Console.WriteLine(image);
-                                    //SaveImage(image, sku + "_" + i + ".jpg", ImageFormat.Jpeg);
-                                }
-
-                            }
+                            continue;
                         }
+
+                        Console.WriteLine($"Cerco l'articolo #{sku}: {descr}");
+                        string searchPageUrl = $"https://www.cosicomodo.it/spesa-online/ricerca?q={ean}";
+                                
+
+                        driver.Navigate().GoToUrl(searchPageUrl);
+                        IWebElement firstResult = wait.Until(ExpectedConditions.ElementExists(By.CssSelector(".large-10 .listing")));
+                        IList<IWebElement> links = firstResult.FindElements(By.TagName("a"));
+                        IWebElement link = links.First(e => e.GetAttribute("href") != "#");
+                        string productPageUrl = link.GetAttribute("href");
+                        Console.WriteLine(productPageUrl);
+
+                        driver.Navigate().GoToUrl(productPageUrl);
+                        IWebElement secondResult = wait.Until(ExpectedConditions.ElementExists(By.CssSelector(".image-container")));
+                        IList<IWebElement> images = secondResult.FindElements(By.CssSelector(".image-container .slick-slide a.mfp-zoom"));
+
+                        for (int i = 0; i < images.Count() && i < 5; i++)
+                        {
+                            string image = images.ElementAt(i).GetAttribute("href");
+                            Console.WriteLine(image);
+                            SaveImage(image, sku + "_" + i + ".jpg", ImageFormat.Jpeg);
+                        }
+
                     }
+                        
+                    
 
                 }
-                catch (InvalidCookieDomainException e)
-                {
-                    Console.WriteLine(e.Message);
-                }
-                catch (WebDriverTimeoutException e)
+                catch (Exception e)
                 {
                     Console.WriteLine(e.Message);
                 }
