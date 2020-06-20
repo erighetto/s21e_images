@@ -14,6 +14,8 @@ using System.Linq;
 using System.Net;
 using System.Threading;
 using System;
+using System.Text;
+using RandomUserAgent;
 
 namespace S21eimagesrefine
 {
@@ -28,9 +30,20 @@ namespace S21eimagesrefine
             string json = File.ReadAllText(path);
             DateTime time = new DateTime(2020, 12, 31, 23, 02, 03);
 
+            Proxy proxy = new Proxy
+            {
+                Kind = ProxyKind.Manual,
+                IsAutoDetect = false,
+                SslProxy = getAvailableProxy()
+            };
+
+            string userAgent = RandomUa.RandomUserAgent;
 
             FirefoxOptions options = new FirefoxOptions();
-            options.AddArguments("--headless");
+            options.AddArgument("--headless");
+            //options.Proxy = proxy;
+            //options.AddArgument("ignore-certificate-errors");
+            //options.AddArgument($"--user-agent={userAgent}");
 
             using (IWebDriver driver = new FirefoxDriver(options))
             {
@@ -39,11 +52,13 @@ namespace S21eimagesrefine
 
                 try
                 {
+                    //IJavaScriptExecutor js = (IJavaScriptExecutor)driver;
+                    //js.ExecuteScript("window.key = \"blahblah\";");
                     driver.Navigate().GoToUrl("https://www.cosicomodo.it");
 
                     driver.Manage().Cookies.AddCookie(new Cookie(
                         "rbzid",
-                        "LuK8CpFtsds0UnWPg0Yq9EaAAHfZyg8Rp9pNSaztL/Wf0as4oMMmVeLQJYd9dhck0yVRT95O7IgTCJZdF7eH5PGiegm1qPcARfXoFe5fnOQUzbqWm8btdCPlIvd8bBr/Vu8f+1VjkMK/dIJi+4odVe1c5xj8DwfPMU8TQeAHn03NhJCDL4Bs0iCr0DyMhfYtXe+Ptfvt/dc7cZVFKFs3qdcOre3+PZx4LftsqjQTpdeJBVHEdN9z6uj58SAbM/n7F/7vdv3OOaKoNdc75IY6xA==",
+                        "WiX9Yj63ipoEanWsCkRi5g9723qLKUZmO5uAGMfjLajVPkW3C84Kk+e5/VpDDTKuzyad49HO/4QkblOxNGLt61r+Y183VCNhAPDPtGhn2tUu4a61c87kWGplrRrbak4wTJDh0N/fFsQkAmhnzkxA8hDCAEO6hxeMo/hUrPdSSITUjho3lf1JZdwd5S/2rP0jl5prIxmxXaZ3fFnIf9l8xM0U9FjS3qh/k76NhnhpWa1BOHr/Il31aDO8firsKYRJ",
                         ".www.cosicomodo.it",
                         "/",
                         time
@@ -51,16 +66,8 @@ namespace S21eimagesrefine
 
                     driver.Manage().Cookies.AddCookie(new Cookie(
                         "rbzsessionid",
-                        "d78e471a2f818c65a15b7de836a1f801",
+                        "d3323152acc5c5d4818b1f6a9164758b",
                         ".www.cosicomodo.it",
-                        "/",
-                        time
-                    ));
-
-                    driver.Manage().Cookies.AddCookie(new Cookie(
-                        "GCLB",
-                        "CIHDvcbJmeX4twE",
-                        "www.cosicomodo.it",
                         "/",
                         time
                     ));
@@ -140,6 +147,12 @@ namespace S21eimagesrefine
 
         }
 
+        /// <summary>
+        /// Salvataggio delle immagini
+        /// </summary>
+        /// <param name="imageUrl"></param>
+        /// <param name="filename"></param>
+        /// <param name="format"></param>
         public static void SaveImage(string imageUrl, string filename, ImageFormat format)
         {
             WebClient client = new WebClient();
@@ -158,13 +171,44 @@ namespace S21eimagesrefine
                 }
                 else
                 {
-                    image.Save(pathToFile.Replace(".jpg",".png"), ImageFormat.Png);
+                    using (var b = new Bitmap(image.Width, image.Height))
+                    {
+                        b.SetResolution(image.HorizontalResolution, image.VerticalResolution);
+
+                        using (var g = Graphics.FromImage(b))
+                        {
+                            g.Clear(Color.White);
+                            g.DrawImageUnscaled(image, 0, 0);
+                        }
+
+                        b.Save(pathToFile, format);
+                    }
                 }
+
             }
 
             stream.Flush();
             stream.Close();
             client.Dispose();
+        }
+
+        /// <summary>
+        /// Get random proxy
+        /// </summary>
+        /// <returns></returns>
+        public static string getAvailableProxy()
+        {
+            WebClient client = new WebClient();
+            Stream stream = client.OpenRead("https://proxy11.com/api/proxy.json?key=MTM4Mg.XucDgw.yKXb8LhuqJ4mWTaugo93hI9bYQ4");
+            StreamReader reader = new StreamReader(stream, Encoding.UTF8);
+            string responseString = reader.ReadToEnd();
+
+            Proxies proxies = JsonConvert.DeserializeObject<Proxies>(responseString);
+            Random random = new Random();
+            int k = random.Next(0, proxies.Data.Count);
+            Datum value = proxies.Data[k];
+
+            return value.Ip + ":" + value.Port;
         }
 
     }

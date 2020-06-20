@@ -32,6 +32,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Model\CatalogProductEntities.cs" />
+    <Compile Include="Model\Proxies.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -48,6 +49,10 @@
     <Reference Include="System.Configuration" />
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml" />
+    <Reference Include="RandomUserAgent">
+      <HintPath>..\packages\RandomUserAgent.1.1.2\lib\netstandard2.0\RandomUserAgent.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
