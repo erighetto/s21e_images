@@ -17,17 +17,21 @@ Generate the xml for importing products
 
 Kind of web scraper
 
-    SET @name  = (SELECT 
-            attribute_id
-        FROM
-            eav_attribute
-        WHERE
-            attribute_code = 'name' and frontend_label = 'Product Name');
-    SELECT JSON_OBJECT('CodArt', TRIM(catalog_product_entity.sku), 'DescArticolo', ANY_VALUE(v.value), 'CodEan', ANY_VALUE(pec.code))
-    FROM catalog_product_entity
-    LEFT JOIN product_ean_codes pec ON catalog_product_entity.entity_id = pec.product_id
-    LEFT JOIN catalog_product_entity_varchar v ON catalog_product_entity.entity_id = v.entity_id AND v.attribute_id = @name
-    LEFT JOIN catalog_product_entity_media_gallery_value AS gv ON catalog_product_entity.entity_id = gv.entity_id 
-    LEFT JOIN catalog_product_entity_media_gallery AS g ON gv.value_id = gv.value_id
-    WHERE g.value IS NULL
-    GROUP BY TRIM(catalog_product_entity.sku);
+    DROP TEMPORARY TABLE IF EXISTS supergabry_symfony.tbl_temp1;
+    DROP TEMPORARY TABLE IF EXISTS supergabry_symfony.tbl_temp2;
+
+    CREATE TEMPORARY TABLE supergabry_symfony.tbl_temp1 SELECT a.sku FROM supergabry_magento.catalog_product_entity AS a 
+    LEFT JOIN supergabry_magento.catalog_product_entity_media_gallery_value AS b ON a.entity_id = b.entity_id 
+    LEFT JOIN supergabry_magento.catalog_product_entity_media_gallery AS c ON b.value_id = c.value_id WHERE c.value IS NULL;
+
+    CREATE TEMPORARY TABLE supergabry_symfony.tbl_temp2 SELECT a.sku FROM supergabry_magento.catalog_product_entity AS a 
+    LEFT JOIN supergabry_magento.catalog_product_entity_media_gallery_value_to_entity AS b ON a.entity_id = b.entity_id 
+    LEFT JOIN supergabry_magento.catalog_product_entity_media_gallery AS c ON b.value_id = c.value_id WHERE c.value IS NULL;
+
+    SELECT TRIM(p.CodArt) as CodArt, ANY_VALUE(e.CodEAN) AS CodEan, ANY_VALUE(p.DescArticolo) AS DescArticolo 
+    FROM supergabry_symfony.tblarticolo p 
+    JOIN supergabry_symfony.tblean e USING (CodArt) 
+    WHERE TRIM(p.CodArt) IN (SELECT trim(t1.sku) FROM supergabry_symfony.tbl_temp1 AS t1
+        INNER JOIN supergabry_symfony.tbl_temp2 AS t2 ON t1.sku = t2.sku)
+    GROUP BY TRIM(p.CodArt) 
+    ORDER BY TRIM(p.CodArt);

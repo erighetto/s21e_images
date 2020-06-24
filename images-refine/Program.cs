@@ -93,6 +93,13 @@ namespace S21eimagesrefine
                             continue;
                         }
 
+                        //int number;
+                        //int.TryParse(sku, out number);
+                        //if (number < 4066551)
+                        //{
+                        //    continue;
+                        //}
+
                         Console.WriteLine($"Cerco l'articolo #{sku}: {descr}");
                         string searchPageUrl = $"https://www.cosicomodo.it/spesa-online/ricerca?q={ean}";
                                 
