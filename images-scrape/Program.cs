@@ -52,8 +52,7 @@ namespace S21eimagesscrape
 
                 try
                 {
-                    //IJavaScriptExecutor js = (IJavaScriptExecutor)driver;
-                    //js.ExecuteScript("window.key = \"blahblah\";");
+
                     driver.Navigate().GoToUrl("https://www.cosicomodo.it");
 
                     driver.Manage().Cookies.AddCookie(new Cookie(
@@ -206,7 +205,8 @@ namespace S21eimagesscrape
         public static string getAvailableProxy()
         {
             WebClient client = new WebClient();
-            Stream stream = client.OpenRead("https://proxy11.com/api/proxy.json?key=MTM4Mg.XucDgw.yKXb8LhuqJ4mWTaugo93hI9bYQ4");
+            string proxy11key = Environment.GetEnvironmentVariable("PROXY_11_KEY");
+            Stream stream = client.OpenRead($"https://proxy11.com/api/proxy.json?key={proxy11key}");
             StreamReader reader = new StreamReader(stream, Encoding.UTF8);
             string responseString = reader.ReadToEnd();
 
