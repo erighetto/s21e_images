@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.Support.UI;
 using OpenQA.Selenium;
-using S21eimagesrefine.Model;
+using S21eimagesscrape.Model;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Drawing.Imaging;
@@ -17,7 +17,7 @@ using System;
 using System.Text;
 using RandomUserAgent;
 
-namespace S21eimagesrefine
+namespace S21eimagesscrape
 {
     class Program
     {
@@ -58,7 +58,7 @@ namespace S21eimagesrefine
 
                     driver.Manage().Cookies.AddCookie(new Cookie(
                         "rbzid",
-                        "WiX9Yj63ipoEanWsCkRi5g9723qLKUZmO5uAGMfjLajVPkW3C84Kk+e5/VpDDTKuzyad49HO/4QkblOxNGLt61r+Y183VCNhAPDPtGhn2tUu4a61c87kWGplrRrbak4wTJDh0N/fFsQkAmhnzkxA8hDCAEO6hxeMo/hUrPdSSITUjho3lf1JZdwd5S/2rP0jl5prIxmxXaZ3fFnIf9l8xM0U9FjS3qh/k76NhnhpWa1BOHr/Il31aDO8firsKYRJ",
+                        "qRNV0kjQC7Jjolpkl0IuG8QD6P1JCCVcXVTYZKbEYPCnqrXFG+xNSgsweLIFBK+FyT5F06S0PWyidcOvYYgq57vEXLA3bTzjpl9WlWrTQnDCrf4hJ2OEDBQre672cDyBX7gMEjfS62L5mahqdPQQx0AclekiNnFPDbUnwN2JfKggYB/EIsqJPs6QHHZXy7l5prMGeCjZR95tpGgbO4jqya+rFHVTMxnqwkdXdvlxL+pqT2iz3zKUgXBJcGhHjggU",
                         ".www.cosicomodo.it",
                         "/",
                         time
@@ -66,7 +66,7 @@ namespace S21eimagesrefine
 
                     driver.Manage().Cookies.AddCookie(new Cookie(
                         "rbzsessionid",
-                        "d3323152acc5c5d4818b1f6a9164758b",
+                        "906d5ae8fc4e6355a5145ad557448d68",
                         ".www.cosicomodo.it",
                         "/",
                         time
@@ -83,7 +83,7 @@ namespace S21eimagesrefine
 
                     CatalogProductEntities tblarticoliObj = JsonConvert.DeserializeObject<CatalogProductEntities>(json);
 
-                    foreach (CatalogProductEntity element in tblarticoliObj.CatalogProductEntity)
+                    foreach (CatalogProductEntity element in tblarticoliObj.CatalogProductEntity.OrderBy(o => o.CodArt))
                     {
                         var sku = element.CodArt;
                         var ean = element.CodEan;
@@ -95,7 +95,7 @@ namespace S21eimagesrefine
 
                         //int number;
                         //int.TryParse(sku, out number);
-                        //if (number < 4066551)
+                        //if (number < 231036487)
                         //{
                         //    continue;
                         //}
