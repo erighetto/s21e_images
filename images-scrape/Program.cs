@@ -4,7 +4,6 @@ using Newtonsoft.Json;
 using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.Support.UI;
 using OpenQA.Selenium;
-using S21eimagesscrape.Model;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Drawing.Imaging;
@@ -92,16 +91,15 @@ namespace S21eimagesscrape
                             continue;
                         }
 
-                        //int number;
-                        //int.TryParse(sku, out number);
-                        //if (number < 231036487)
+                        //int.TryParse(sku, out int number);
+                        //if (number < 67370098)
                         //{
                         //    continue;
                         //}
 
                         Console.WriteLine($"Cerco l'articolo #{sku}: {descr}");
-                        string searchPageUrl = $"https://www.cosicomodo.it/spesa-online/ricerca?q={ean}";
-                                
+                        string searchPageUrl = $"https://www.cosicomodo.it/spesa-online/ricerca?q={ean}"; //listago.it
+
 
                         driver.Navigate().GoToUrl(searchPageUrl);
                         IWebElement firstResult = wait.Until(ExpectedConditions.ElementExists(By.CssSelector(".large-10 .listing")));

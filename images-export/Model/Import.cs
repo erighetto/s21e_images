@@ -2,7 +2,7 @@
 using System.Xml.Serialization;
 using System.Collections.Generic;
 
-namespace S21eimagesexport.Model
+namespace S21eimagesexport
 {
 
 	[XmlRoot(ElementName = "gallery_information")]

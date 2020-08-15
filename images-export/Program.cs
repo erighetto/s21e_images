@@ -4,7 +4,6 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
-using S21eimagesexport.Model;
 
 namespace S21eimagesexport
 {

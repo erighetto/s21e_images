@@ -3,7 +3,7 @@ using System.Linq;
 using System.Web;
 using System.Collections.Specialized;
 
-namespace S21eimagescollect.Service
+namespace S21eimagescollect
 {
     public class GoogleImages
     {

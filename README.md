@@ -13,7 +13,7 @@
 Generate the xml for importing products
 
 
-## images refine
+## images scrape
 
 Kind of web scraper
 
