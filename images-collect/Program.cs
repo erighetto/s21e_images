@@ -72,7 +72,9 @@ namespace S21eimagescollect
             string user = Environment.GetEnvironmentVariable("MYSQL_USER");
             string password = Environment.GetEnvironmentVariable("MYSQL_PASSWORD");
             string cs = $"server={host};userid={user};password={password};database=supergabry_magento";
-            List<string> list = new List<string>();
+            List<string> list1 = new List<string>();
+            List<string> list2 = new List<string>();
+            string sku = "";
 
 
             // First Check
@@ -89,11 +91,11 @@ namespace S21eimagescollect
 
             while (rdr1.Read())
             {
-                if (!list.Contains(rdr1.GetString(0)))
+                sku = rdr1.GetString(0);
+                if (!list1.Contains(sku))
                 {
-                    list.Add(rdr1.GetString(0));
+                    list1.Add(sku);
                 }
-
             }
             con1.Close();
 
@@ -112,15 +114,15 @@ namespace S21eimagescollect
 
             while (rdr2.Read())
             {
-                if (!list.Contains(rdr2.GetString(0)))
+                sku = rdr2.GetString(0);
+                if (!list2.Contains(sku))
                 {
-                    list.Add(rdr2.GetString(0));
+                    list2.Add(sku);
                 }
-
             }
             con2.Close();
 
-            return list.ToArray();
+            return list1.Intersect(list2).ToArray();
         }
 
 
