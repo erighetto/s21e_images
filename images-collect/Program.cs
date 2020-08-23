@@ -51,7 +51,6 @@ namespace S21eimagescollect
 
                 adapter.Fill(table);
 
-
                 string createText = JsonConvert.SerializeObject(table);
                 File.WriteAllText(path, "{ \"catalog_product_entity\": " + createText + "}");
 
@@ -61,7 +60,6 @@ namespace S21eimagescollect
             {
                 Console.WriteLine(e.Message);
             }
-
 
         }
 
@@ -74,7 +72,7 @@ namespace S21eimagescollect
             string cs = $"server={host};userid={user};password={password};database=supergabry_magento";
             List<string> list1 = new List<string>();
             List<string> list2 = new List<string>();
-            string sku = "";
+            string sku;
 
 
             // First Check
