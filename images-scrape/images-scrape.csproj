@@ -58,10 +58,8 @@
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="app.config" />
-    <None Include="Data\catalog_product_entity.json" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Data\" />
     <Folder Include="Model\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

@@ -41,8 +41,8 @@ namespace S21eimagesscrape
             FirefoxOptions options = new FirefoxOptions();
             options.AddArgument("--headless");
             //options.Proxy = proxy;
-            //options.AddArgument("ignore-certificate-errors");
-            //options.AddArgument($"--user-agent={userAgent}");
+            options.AddArgument("ignore-certificate-errors");
+            options.AddArgument($"--user-agent={userAgent}");
 
             using (IWebDriver driver = new FirefoxDriver(options))
             {
@@ -97,7 +97,7 @@ namespace S21eimagesscrape
                         //    continue;
                         //}
 
-                        Console.WriteLine($"Cerco l'articolo #{sku}: {descr}");
+                        Console.WriteLine($"Cerco l'articolo {sku}: {descr}");
                         string searchPageUrl = $"https://www.cosicomodo.it/spesa-online/ricerca?q={ean}"; //listago.it
 
 
