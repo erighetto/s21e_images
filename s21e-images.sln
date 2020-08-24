@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImagesCollect", "src\Images
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImagesExport", "src\ImagesExport\ImagesExport.csproj", "{0437F44E-79B7-4D60-B140-139DFE99AD18}"
 EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{E064769B-FD9E-44A0-89E2-FE2D297B7647}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|anycpu = Debug|anycpu
@@ -31,6 +33,10 @@ Global
 		{0437F44E-79B7-4D60-B140-139DFE99AD18}.Debug|anycpu.Build.0 = Debug|Any CPU
 		{0437F44E-79B7-4D60-B140-139DFE99AD18}.Release|anycpu.ActiveCfg = Release|Any CPU
 		{0437F44E-79B7-4D60-B140-139DFE99AD18}.Release|anycpu.Build.0 = Release|Any CPU
+		{E064769B-FD9E-44A0-89E2-FE2D297B7647}.Debug|anycpu.ActiveCfg = Debug|Any CPU
+		{E064769B-FD9E-44A0-89E2-FE2D297B7647}.Debug|anycpu.Build.0 = Debug|Any CPU
+		{E064769B-FD9E-44A0-89E2-FE2D297B7647}.Release|anycpu.ActiveCfg = Release|Any CPU
+		{E064769B-FD9E-44A0-89E2-FE2D297B7647}.Release|anycpu.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

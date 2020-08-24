@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "ImagesCollect": {
+      "commandName": "Project"
+    },
+    "Docker": {
+      "commandName": "Docker"
+    }
+  }
+}

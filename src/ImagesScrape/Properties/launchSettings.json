@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "ImagesScrape": {
+      "commandName": "Project"
+    },
+    "Docker": {
+      "commandName": "Docker"
+    }
+  }
+}
