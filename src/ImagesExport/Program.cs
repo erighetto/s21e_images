@@ -23,7 +23,7 @@ namespace ImagesExport
 			};
 
 			string[] fileEntries = Directory.GetFiles(Path.Combine(targetDirectory, "product_images"));
-			foreach (string path in fileEntries)
+			foreach (string path in fileEntries.OrderBy(o => o))
 			{
 				string fileName = Path.GetFileName(path);
 
