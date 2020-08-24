@@ -1,16 +1,17 @@
-
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30320.27
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C3470CD9-5D3A-45C5-AEB9-23712481AEA4}"
 	ProjectSection(SolutionItems) = preProject
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImagesScrape", "src\ImagesScrape\ImagesScrape.csproj", "{157CBB7C-743B-456C-B9CF-38270C654331}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImagesScrape", "src\ImagesScrape\ImagesScrape.csproj", "{157CBB7C-743B-456C-B9CF-38270C654331}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImagesCollect", "src\ImagesCollect\ImagesCollect.csproj", "{1D05B84B-1F02-4713-B0E4-64D3CE9F73F5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImagesCollect", "src\ImagesCollect\ImagesCollect.csproj", "{1D05B84B-1F02-4713-B0E4-64D3CE9F73F5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImagesExport", "src\ImagesExport\ImagesExport.csproj", "{0437F44E-79B7-4D60-B140-139DFE99AD18}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImagesExport", "src\ImagesExport\ImagesExport.csproj", "{0437F44E-79B7-4D60-B140-139DFE99AD18}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,10 +19,10 @@ Global
 		Release|anycpu = Release|anycpu
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{157CBB7C-743B-456C-B9CF-38270C654331}.Debug|anycpu.ActiveCfg = Debug|anycpu
-		{157CBB7C-743B-456C-B9CF-38270C654331}.Debug|anycpu.Build.0 = Debug|anycpu
-		{157CBB7C-743B-456C-B9CF-38270C654331}.Release|anycpu.ActiveCfg = Release|anycpu
-		{157CBB7C-743B-456C-B9CF-38270C654331}.Release|anycpu.Build.0 = Release|anycpu
+		{157CBB7C-743B-456C-B9CF-38270C654331}.Debug|anycpu.ActiveCfg = Debug|Any CPU
+		{157CBB7C-743B-456C-B9CF-38270C654331}.Debug|anycpu.Build.0 = Debug|Any CPU
+		{157CBB7C-743B-456C-B9CF-38270C654331}.Release|anycpu.ActiveCfg = Release|Any CPU
+		{157CBB7C-743B-456C-B9CF-38270C654331}.Release|anycpu.Build.0 = Release|Any CPU
 		{1D05B84B-1F02-4713-B0E4-64D3CE9F73F5}.Debug|anycpu.ActiveCfg = Debug|Any CPU
 		{1D05B84B-1F02-4713-B0E4-64D3CE9F73F5}.Debug|anycpu.Build.0 = Debug|Any CPU
 		{1D05B84B-1F02-4713-B0E4-64D3CE9F73F5}.Release|anycpu.ActiveCfg = Release|Any CPU
@@ -30,5 +31,11 @@ Global
 		{0437F44E-79B7-4D60-B140-139DFE99AD18}.Debug|anycpu.Build.0 = Debug|Any CPU
 		{0437F44E-79B7-4D60-B140-139DFE99AD18}.Release|anycpu.ActiveCfg = Release|Any CPU
 		{0437F44E-79B7-4D60-B140-139DFE99AD18}.Release|anycpu.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5BECEACF-4F7B-4B40-8A94-69677E974FE8}
 	EndGlobalSection
 EndGlobal
