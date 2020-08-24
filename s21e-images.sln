@@ -1,16 +1,16 @@
 
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "images-export", "images-export\images-export.csproj", "{95631BAD-E2F4-4F65-8393-F8FEC701295E}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "images-collect", "images-collect\images-collect.csproj", "{F68D02C4-00B0-4206-8FA2-1DA9B0235565}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C3470CD9-5D3A-45C5-AEB9-23712481AEA4}"
 	ProjectSection(SolutionItems) = preProject
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "images-scrape", "images-scrape\images-scrape.csproj", "{157CBB7C-743B-456C-B9CF-38270C654331}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImagesScrape", "src\ImagesScrape\ImagesScrape.csproj", "{157CBB7C-743B-456C-B9CF-38270C654331}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImagesCollect", "src\ImagesCollect\ImagesCollect.csproj", "{1D05B84B-1F02-4713-B0E4-64D3CE9F73F5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImagesExport", "src\ImagesExport\ImagesExport.csproj", "{0437F44E-79B7-4D60-B140-139DFE99AD18}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,17 +18,17 @@ Global
 		Release|anycpu = Release|anycpu
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{95631BAD-E2F4-4F65-8393-F8FEC701295E}.Debug|anycpu.ActiveCfg = Debug|anycpu
-		{95631BAD-E2F4-4F65-8393-F8FEC701295E}.Debug|anycpu.Build.0 = Debug|anycpu
-		{95631BAD-E2F4-4F65-8393-F8FEC701295E}.Release|anycpu.ActiveCfg = Release|anycpu
-		{95631BAD-E2F4-4F65-8393-F8FEC701295E}.Release|anycpu.Build.0 = Release|anycpu
-		{F68D02C4-00B0-4206-8FA2-1DA9B0235565}.Debug|anycpu.ActiveCfg = Debug|anycpu
-		{F68D02C4-00B0-4206-8FA2-1DA9B0235565}.Debug|anycpu.Build.0 = Debug|anycpu
-		{F68D02C4-00B0-4206-8FA2-1DA9B0235565}.Release|anycpu.ActiveCfg = Release|anycpu
-		{F68D02C4-00B0-4206-8FA2-1DA9B0235565}.Release|anycpu.Build.0 = Release|anycpu
 		{157CBB7C-743B-456C-B9CF-38270C654331}.Debug|anycpu.ActiveCfg = Debug|anycpu
 		{157CBB7C-743B-456C-B9CF-38270C654331}.Debug|anycpu.Build.0 = Debug|anycpu
 		{157CBB7C-743B-456C-B9CF-38270C654331}.Release|anycpu.ActiveCfg = Release|anycpu
 		{157CBB7C-743B-456C-B9CF-38270C654331}.Release|anycpu.Build.0 = Release|anycpu
+		{1D05B84B-1F02-4713-B0E4-64D3CE9F73F5}.Debug|anycpu.ActiveCfg = Debug|Any CPU
+		{1D05B84B-1F02-4713-B0E4-64D3CE9F73F5}.Debug|anycpu.Build.0 = Debug|Any CPU
+		{1D05B84B-1F02-4713-B0E4-64D3CE9F73F5}.Release|anycpu.ActiveCfg = Release|Any CPU
+		{1D05B84B-1F02-4713-B0E4-64D3CE9F73F5}.Release|anycpu.Build.0 = Release|Any CPU
+		{0437F44E-79B7-4D60-B140-139DFE99AD18}.Debug|anycpu.ActiveCfg = Debug|Any CPU
+		{0437F44E-79B7-4D60-B140-139DFE99AD18}.Debug|anycpu.Build.0 = Debug|Any CPU
+		{0437F44E-79B7-4D60-B140-139DFE99AD18}.Release|anycpu.ActiveCfg = Release|Any CPU
+		{0437F44E-79B7-4D60-B140-139DFE99AD18}.Release|anycpu.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

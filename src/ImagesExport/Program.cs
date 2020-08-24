@@ -4,12 +4,13 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
+using ImagesExport.Model;
 
-namespace S21eimagesexport
+namespace ImagesExport
 {
     class Program
     {
-        public static void Main(string[] args)
+        static void Main(string[] args)
         {
             string targetDirectory = ConfigurationManager.AppSettings["AssetsPath"];
 
@@ -74,7 +75,8 @@ namespace S21eimagesexport
                     if (importObj.Simple is object)
                     {
                         importObj.Simple.Add(newObj);
-                    } else
+                    }
+                    else
                     {
                         importObj.Simple = new List<Simple>
                         {
@@ -119,6 +121,5 @@ namespace S21eimagesexport
             TextWriter writer = new StreamWriter(filename, false);
             x.Serialize(writer, importObj);
         }
-
     }
 }

@@ -16,7 +16,7 @@ using System;
 using System.Text;
 using RandomUserAgent;
 
-namespace S21eimagesscrape
+namespace ImagesScrape
 {
     class Program
     {

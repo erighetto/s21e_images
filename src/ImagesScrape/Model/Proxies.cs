@@ -5,7 +5,7 @@ using System.Globalization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace S21eimagesscrape
+namespace ImagesScrape
 {
     public partial class Proxies
     {

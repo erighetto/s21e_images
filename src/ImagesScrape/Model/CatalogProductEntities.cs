@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace S21eimagesscrape
+namespace ImagesScrape
 {
     public class CatalogProductEntity
     {

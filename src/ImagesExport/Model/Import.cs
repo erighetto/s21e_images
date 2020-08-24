@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Xml.Serialization;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 
-namespace S21eimagesexport
+namespace ImagesExport.Model
 {
-
 	[XmlRoot(ElementName = "gallery_information")]
 	public class GalleryInformation
 	{
@@ -58,6 +57,4 @@ namespace S21eimagesexport
 		[XmlElement(ElementName = "simple")]
 		public List<Simple> Simple { get; set; }
 	}
-
 }
-
