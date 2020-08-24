@@ -33,7 +33,7 @@ namespace ImagesCollect
                             "JOIN tblean e USING(CodArt) " +
                             "JOIN tbllistinovend l USING(CodArt) " +
                             "WHERE TRIM(p.CodArt) IN ({0}) " +
-                            "AND STR_TO_DATE(l.FlgDataUltimaModifica, '%d/%m/%Y') >= DATE_SUB(CURDATE(), INTERVAL 90 DAY)" +
+                            "AND STR_TO_DATE(l.FlgDataUltimaModifica, '%d/%m/%Y') >= DATE_SUB(CURDATE(), INTERVAL 45 DAY)" +
                             "GROUP BY TRIM(p.CodArt) " +
                             "ORDER BY TRIM(p.CodArt)", string.Join(", ", items.Select(x => "?")));
 
