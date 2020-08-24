@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Data;
 using System.IO;
 using System.Linq;
+using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
 
@@ -15,7 +15,11 @@ namespace ImagesCollect
         {
             try
             {
-                string conf = ConfigurationManager.AppSettings["DataPath"];
+                
+                IConfiguration configuration = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json", true, true)
+                .Build();
+                string conf = configuration.GetSection("AppSetting")["DataPath"];
                 string path = Path.Combine(Path.GetDirectoryName(conf), "catalog_product_entity.json");
                 string host = Environment.GetEnvironmentVariable("MYSQL_HOST");
                 string user = Environment.GetEnvironmentVariable("MYSQL_USER");

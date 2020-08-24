@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
+using Microsoft.Extensions.Configuration;
 using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
@@ -12,7 +12,11 @@ namespace ImagesExport
     {
         static void Main(string[] args)
         {
-            string targetDirectory = ConfigurationManager.AppSettings["AssetsPath"];
+
+            IConfiguration configuration = new ConfigurationBuilder()
+            .AddJsonFile("appsettings.json", true, true)
+            .Build();
+            string targetDirectory = configuration.GetSection("AppSetting")["AssetsPath"];
 
             Import importObj = new Import();
 

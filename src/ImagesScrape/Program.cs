@@ -5,7 +5,7 @@ using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.Support.UI;
 using OpenQA.Selenium;
 using System.Collections.Generic;
-using System.Configuration;
+using Microsoft.Extensions.Configuration;
 using System.Drawing.Imaging;
 using System.Drawing;
 using System.IO;
@@ -24,7 +24,10 @@ namespace ImagesScrape
         public static void Main(string[] args)
         {
 
-            string conf = ConfigurationManager.AppSettings["DataPath"];
+            IConfiguration configuration = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json", true, true)
+                .Build();
+            string conf = configuration.GetSection("AppSetting")["DataPath"];
             string path = Path.Combine(Path.GetDirectoryName(conf), "catalog_product_entity.json");
             string json = File.ReadAllText(path);
             DateTime time = new DateTime(2020, 12, 31, 23, 02, 03);
@@ -165,7 +168,10 @@ namespace ImagesScrape
 
             if (image != null)
             {
-                string conf = ConfigurationManager.AppSettings["AssetsPath"];
+                IConfiguration configuration = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json", true, true)
+                .Build();
+                string conf = configuration.GetSection("AppSetting")["AssetsPath"];
                 string pathToFile = Path.Combine(Path.GetDirectoryName(conf), "product_images/" + filename);
 
                 if (ImageFormat.Jpeg.Equals(image.RawFormat))
