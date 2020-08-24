@@ -36,7 +36,7 @@ namespace ImagesScrape
             {
                 Kind = ProxyKind.Manual,
                 IsAutoDetect = false,
-                SslProxy = getAvailableProxy()
+                SslProxy = GetAvailableProxy()
             };
 
             string userAgent = RandomUa.RandomUserAgent;
@@ -95,13 +95,13 @@ namespace ImagesScrape
                         }
 
                         //int.TryParse(sku, out int number);
-                        //if (number < 67370098)
+                        //if (number < 2300309)
                         //{
                         //    continue;
                         //}
 
                         Console.WriteLine($"Cerco l'articolo {sku}: {descr}");
-                        string searchPageUrl = $"https://www.cosicomodo.it/spesa-online/ricerca?q={ean}"; //listago.it
+                        string searchPageUrl = $"https://www.cosicomodo.it/spesa-online/ricerca?q={ean}";
 
 
                         driver.Navigate().GoToUrl(searchPageUrl);
@@ -206,7 +206,7 @@ namespace ImagesScrape
         /// Get random proxy
         /// </summary>
         /// <returns></returns>
-        public static string getAvailableProxy()
+        public static string GetAvailableProxy()
         {
             WebClient client = new WebClient();
             string proxy11key = Environment.GetEnvironmentVariable("PROXY_11_KEY");

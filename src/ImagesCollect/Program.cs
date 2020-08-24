@@ -26,14 +26,14 @@ namespace ImagesCollect
                 string password = Environment.GetEnvironmentVariable("MYSQL_PASSWORD");
                 string cs = $"server={host};userid={user};password={password};database=supergabry_symfony";
 
-                string[] items = getMissingImages();
+                string[] items = GetMissingImages();
 
                 string sql = string.Format("SELECT TRIM(p.CodArt) as CodArt, ANY_VALUE(e.CodEAN) AS CodEan, ANY_VALUE(p.DescArticolo) AS DescArticolo " +
                             "FROM tblarticolo p " +
                             "JOIN tblean e USING(CodArt) " +
                             "JOIN tbllistinovend l USING(CodArt) " +
                             "WHERE TRIM(p.CodArt) IN ({0}) " +
-                            "AND STR_TO_DATE(l.FlgDataUltimaModifica, '%d/%m/%Y') >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)" +
+                            "AND STR_TO_DATE(l.FlgDataUltimaModifica, '%d/%m/%Y') >= DATE_SUB(CURDATE(), INTERVAL 90 DAY)" +
                             "GROUP BY TRIM(p.CodArt) " +
                             "ORDER BY TRIM(p.CodArt)", string.Join(", ", items.Select(x => "?")));
 
@@ -65,7 +65,11 @@ namespace ImagesCollect
             }
         }
 
-        public static string[] getMissingImages()
+        /// <summary>
+        /// Get Missing Images
+        /// </summary>
+        /// <returns></returns>
+        public static string[] GetMissingImages()
         {
 
             string host = Environment.GetEnvironmentVariable("MYSQL_HOST");
