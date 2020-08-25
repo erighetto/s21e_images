@@ -22,6 +22,8 @@ namespace S21eImages
                 string password = Environment.GetEnvironmentVariable("MYSQL_PASSWORD");
                 string cs = $"server={host};userid={user};password={password};database=supergabry_symfony";
 
+                Console.WriteLine("Raccolgo nel db le informazioni relative ai prodotti senza immagini.");
+
                 string[] items = GetMissingImages();
 
                 string sql = string.Format("SELECT TRIM(p.CodArt) as CodArt, ANY_VALUE(e.CodEAN) AS CodEan, ANY_VALUE(p.DescArticolo) AS DescArticolo " +
