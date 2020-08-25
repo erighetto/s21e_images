@@ -16,7 +16,7 @@ RUN dotnet publish "S21eImages.csproj" -c Release -o /app/publish
 
 FROM base AS final
 # Firefox browser to run the tests
-RUN apt-get update && apt-get install -y firefox-esr wget
+RUN apt-get update && apt-get install -y firefox-esr wget curl xvfb
  
 # Gecko Driver
 ENV GECKODRIVER_VERSION 0.27.0
@@ -38,5 +38,4 @@ COPY --from=publish /app/publish .
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 RUN chmod +x /docker-entrypoint.sh
 
-#ENTRYPOINT ["/docker-entrypoint.sh"]
-ENTRYPOINT [ "dotnet", "S21eImages.dll", "scrape" ]
+ENTRYPOINT ["/docker-entrypoint.sh"]
