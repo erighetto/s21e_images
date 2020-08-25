@@ -17,8 +17,9 @@ namespace S21eImages
             {
 
                 IConfiguration configuration = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json", true, true)
-                .Build();
+                    .AddJsonFile("appsettings.json", true, true)
+                    .Build();
+
                 string conf = configuration.GetSection("AppSetting")["DataPath"];
                 string path = Path.Combine(Path.GetDirectoryName(conf), "catalog_product_entity.json");
                 string host = Environment.GetEnvironmentVariable("MYSQL_HOST");

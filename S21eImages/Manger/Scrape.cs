@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
 using System.Drawing.Imaging;
 using System.Drawing;
+using DrawingImage = System.Drawing.Image;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -26,6 +27,7 @@ namespace S21eImages
             IConfiguration configuration = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json", true, true)
                 .Build();
+
             string conf = configuration.GetSection("AppSetting")["DataPath"];
             string path = Path.Combine(Path.GetDirectoryName(conf), "catalog_product_entity.json");
             string json = File.ReadAllText(path);
@@ -46,109 +48,106 @@ namespace S21eImages
             options.AddArgument("ignore-certificate-errors");
             options.AddArgument($"--user-agent={userAgent}");
 
-            using (IWebDriver driver = new FirefoxDriver(options))
+            using IWebDriver driver = new FirefoxDriver(options);
+            driver.Manage().Window.Maximize();
+            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+
+            try
             {
-                driver.Manage().Window.Maximize();
-                WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
 
-                try
+                driver.Navigate().GoToUrl("https://www.cosicomodo.it");
+
+                driver.Manage().Cookies.AddCookie(new Cookie(
+                    "rbzid",
+                    "qRNV0kjQC7Jjolpkl0IuG8QD6P1JCCVcXVTYZKbEYPCnqrXFG+xNSgsweLIFBK+FyT5F06S0PWyidcOvYYgq57vEXLA3bTzjpl9WlWrTQnDCrf4hJ2OEDBQre672cDyBX7gMEjfS62L5mahqdPQQx0AclekiNnFPDbUnwN2JfKggYB/EIsqJPs6QHHZXy7l5prMGeCjZR95tpGgbO4jqya+rFHVTMxnqwkdXdvlxL+pqT2iz3zKUgXBJcGhHjggU",
+                    ".www.cosicomodo.it",
+                    "/",
+                    time
+                ));
+
+                driver.Manage().Cookies.AddCookie(new Cookie(
+                    "rbzsessionid",
+                    "906d5ae8fc4e6355a5145ad557448d68",
+                    ".www.cosicomodo.it",
+                    "/",
+                    time
+                ));
+
+                driver.Manage().Cookies.AddCookie(new Cookie(
+                    "cookies-disclaimer-v1",
+                    "true",
+                    "www.cosicomodo.it",
+                    "/",
+                    time
+                ));
+
+
+                CatalogProductEntities tblarticoliObj = JsonConvert.DeserializeObject<CatalogProductEntities>(json);
+
+                foreach (CatalogProductEntity element in tblarticoliObj.CatalogProductEntity.OrderBy(o => o.CodArt))
                 {
-
-                    driver.Navigate().GoToUrl("https://www.cosicomodo.it");
-
-                    driver.Manage().Cookies.AddCookie(new Cookie(
-                        "rbzid",
-                        "qRNV0kjQC7Jjolpkl0IuG8QD6P1JCCVcXVTYZKbEYPCnqrXFG+xNSgsweLIFBK+FyT5F06S0PWyidcOvYYgq57vEXLA3bTzjpl9WlWrTQnDCrf4hJ2OEDBQre672cDyBX7gMEjfS62L5mahqdPQQx0AclekiNnFPDbUnwN2JfKggYB/EIsqJPs6QHHZXy7l5prMGeCjZR95tpGgbO4jqya+rFHVTMxnqwkdXdvlxL+pqT2iz3zKUgXBJcGhHjggU",
-                        ".www.cosicomodo.it",
-                        "/",
-                        time
-                    ));
-
-                    driver.Manage().Cookies.AddCookie(new Cookie(
-                        "rbzsessionid",
-                        "906d5ae8fc4e6355a5145ad557448d68",
-                        ".www.cosicomodo.it",
-                        "/",
-                        time
-                    ));
-
-                    driver.Manage().Cookies.AddCookie(new Cookie(
-                        "cookies-disclaimer-v1",
-                        "true",
-                        "www.cosicomodo.it",
-                        "/",
-                        time
-                    ));
-
-
-                    CatalogProductEntities tblarticoliObj = JsonConvert.DeserializeObject<CatalogProductEntities>(json);
-
-                    foreach (CatalogProductEntity element in tblarticoliObj.CatalogProductEntity.OrderBy(o => o.CodArt))
+                    var sku = element.CodArt;
+                    var ean = element.CodEan;
+                    var descr = element.DescArticolo;
+                    if (string.IsNullOrEmpty(ean))
                     {
-                        var sku = element.CodArt;
-                        var ean = element.CodEan;
-                        var descr = element.DescArticolo;
-                        if (string.IsNullOrEmpty(ean))
+                        continue;
+                    }
+
+                    //int.TryParse(sku, out int number);
+                    //if (number < 2300309)
+                    //{
+                    //    continue;
+                    //}
+
+                    Console.WriteLine($"Cerco l'articolo {sku}: {descr}");
+                    string searchPageUrl = $"https://www.cosicomodo.it/spesa-online/ricerca?q={ean}";
+
+
+                    driver.Navigate().GoToUrl(searchPageUrl);
+                    IWebElement firstResult = wait.Until(ExpectedConditions.ElementExists(By.CssSelector(".large-10 .listing")));
+                    IList<IWebElement> links = firstResult.FindElements(By.TagName("a"));
+
+                    if (links.Count() < 1)
+                    {
+                        continue;
+                    }
+
+                    IWebElement link = links.First(e => e.GetAttribute("href") != "#");
+                    string productPageUrl = link.GetAttribute("href");
+                    if (string.IsNullOrEmpty(productPageUrl))
+                    {
+                        continue;
+                    }
+                    Console.WriteLine(productPageUrl);
+
+                    driver.Navigate().GoToUrl(productPageUrl);
+                    IWebElement secondResult = wait.Until(ExpectedConditions.ElementExists(By.CssSelector(".image-container")));
+                    IList<IWebElement> images = secondResult.FindElements(By.CssSelector(".image-container .slick-slide a.mfp-zoom"));
+
+                    for (int i = 0; i < images.Count() && i < 5; i++)
+                    {
+                        string image = images.ElementAt(i).GetAttribute("href");
+                        if (!string.IsNullOrEmpty(image))
                         {
-                            continue;
-                        }
-
-                        //int.TryParse(sku, out int number);
-                        //if (number < 2300309)
-                        //{
-                        //    continue;
-                        //}
-
-                        Console.WriteLine($"Cerco l'articolo {sku}: {descr}");
-                        string searchPageUrl = $"https://www.cosicomodo.it/spesa-online/ricerca?q={ean}";
-
-
-                        driver.Navigate().GoToUrl(searchPageUrl);
-                        IWebElement firstResult = wait.Until(ExpectedConditions.ElementExists(By.CssSelector(".large-10 .listing")));
-                        IList<IWebElement> links = firstResult.FindElements(By.TagName("a"));
-
-                        if (links.Count() < 1)
-                        {
-                            continue;
-                        }
-
-                        IWebElement link = links.First(e => e.GetAttribute("href") != "#");
-                        string productPageUrl = link.GetAttribute("href");
-                        if (string.IsNullOrEmpty(productPageUrl))
-                        {
-                            continue;
-                        }
-                        Console.WriteLine(productPageUrl);
-
-                        driver.Navigate().GoToUrl(productPageUrl);
-                        IWebElement secondResult = wait.Until(ExpectedConditions.ElementExists(By.CssSelector(".image-container")));
-                        IList<IWebElement> images = secondResult.FindElements(By.CssSelector(".image-container .slick-slide a.mfp-zoom"));
-
-                        for (int i = 0; i < images.Count() && i < 5; i++)
-                        {
-                            string image = images.ElementAt(i).GetAttribute("href");
-                            if (!string.IsNullOrEmpty(image))
-                            {
-                                Console.WriteLine(image);
-                                SaveImage(image, sku + "_" + i + ".jpg", ImageFormat.Jpeg);
-                            }
-
+                            Console.WriteLine(image);
+                            SaveImage(image, sku + "_" + i + ".jpg", ImageFormat.Jpeg);
                         }
 
                     }
 
-
-
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e.Message);
-                }
-                finally
-                {
-                    Thread.Sleep(3000);
                 }
 
+
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            finally
+            {
+                Thread.Sleep(3000);
             }
 
         }
@@ -163,7 +162,7 @@ namespace S21eImages
         {
             WebClient client = new WebClient();
             Stream stream = client.OpenRead(imageUrl);
-            Image image = Image.FromStream(stream);
+            DrawingImage image = DrawingImage.FromStream(stream);
 
             if (image != null)
             {
@@ -180,18 +179,16 @@ namespace S21eImages
                 }
                 else
                 {
-                    using (var b = new Bitmap(image.Width, image.Height))
+                    using var b = new Bitmap(image.Width, image.Height);
+                    b.SetResolution(image.HorizontalResolution, image.VerticalResolution);
+
+                    using (var g = Graphics.FromImage(b))
                     {
-                        b.SetResolution(image.HorizontalResolution, image.VerticalResolution);
-
-                        using (var g = Graphics.FromImage(b))
-                        {
-                            g.Clear(Color.White);
-                            g.DrawImageUnscaled(image, 0, 0);
-                        }
-
-                        b.Save(pathToFile, format);
+                        g.Clear(Color.White);
+                        g.DrawImageUnscaled(image, 0, 0);
                     }
+
+                    b.Save(pathToFile, format);
                 }
 
             }

@@ -9,98 +9,101 @@ namespace S21eImages
 {
     public class Export : IExport
     {
-		public void Do()
-		{
+        public void Do()
+        {
 
-			IConfiguration configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json", true, true).Build();
-			string targetDirectory = configuration.GetSection("AppSetting")["AssetsPath"];
-			List<string> list = new List<string>();
+            IConfiguration configuration = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json", true, true)
+                .Build();
 
-			Import importObj = new Import
-			{
-				Simple = new List<Simple> { }
-			};
+            string targetDirectory = configuration.GetSection("AppSetting")["AssetsPath"];
+            List<string> list = new List<string>();
 
-			string[] fileEntries = Directory.GetFiles(Path.Combine(targetDirectory, "product_images"));
-			foreach (string path in fileEntries.OrderBy(o => o))
-			{
-				string fileName = Path.GetFileName(path);
+            Import importObj = new Import
+            {
+                Simple = new List<Simple> { }
+            };
 
-				if (IsImage(Path.GetExtension(fileName)))
-				{
-					string sku = fileName.Split('_')[0];
+            string[] fileEntries = Directory.GetFiles(Path.Combine(targetDirectory, "product_images"));
+            foreach (string path in fileEntries.OrderBy(o => o))
+            {
+                string fileName = Path.GetFileName(path);
 
-					Console.WriteLine("Sku: {0} - File: {1}", sku, fileName);
+                if (IsImage(Path.GetExtension(fileName)))
+                {
+                    string sku = fileName.Split('_')[0];
 
-					Image img = new Image
-					{
-						FileOrUrl = "product_images/" + fileName,
-						Global = new Global
-						{
-							Role = new List<string> {
-								"image",
-								"small_image",
-								"thumbnail"
-							}
-						}
-					};
+                    Console.WriteLine("Sku: {0} - File: {1}", sku, fileName);
 
-					Simple itemObj = importObj.Simple.FirstOrDefault(x => x.Sku == sku);
-					if (itemObj == null)
-					{
-						importObj.Simple.Add(new Simple
-						{
-							Sku = sku,
-							Images = new Images
-							{
-								Image = new List<Image> {
-									img
-								}
-							}
-						});
-					}
-					else
-					{
-						itemObj.Images.Image.Add(img);
-					}
+                    Image img = new Image
+                    {
+                        FileOrUrl = "product_images/" + fileName,
+                        Global = new Global
+                        {
+                            Role = new List<string> {
+                                "image",
+                                "small_image",
+                                "thumbnail"
+                            }
+                        }
+                    };
 
-				}
-			}
+                    Simple itemObj = importObj.Simple.FirstOrDefault(x => x.Sku == sku);
+                    if (itemObj == null)
+                    {
+                        importObj.Simple.Add(new Simple
+                        {
+                            Sku = sku,
+                            Images = new Images
+                            {
+                                Image = new List<Image> {
+                                    img
+                                }
+                            }
+                        });
+                    }
+                    else
+                    {
+                        itemObj.Images.Image.Add(img);
+                    }
 
-			string fileToWrite = Path.Combine(targetDirectory, "export-articoli.xml");
+                }
+            }
 
-			WriteToFile(fileToWrite, importObj);
-		}
+            string fileToWrite = Path.Combine(targetDirectory, "export-articoli.xml");
 
-		/// <summary>
-		/// Controllo se è un'immagine
-		/// </summary>
-		/// <param name="ext"></param>
-		/// <returns></returns>
-		public static bool IsImage(string ext)
-		{
-			List<string> imagesTypes = new List<string> {
-				".png",
-				".jpg",
-				".jpeg",
-				".bmp",
-				".gif"
-			};
+            WriteToFile(fileToWrite, importObj);
+        }
 
-			return imagesTypes.Contains(ext.ToLower());
-		}
+        /// <summary>
+        /// Controllo se è un'immagine
+        /// </summary>
+        /// <param name="ext"></param>
+        /// <returns></returns>
+        public static bool IsImage(string ext)
+        {
+            List<string> imagesTypes = new List<string> {
+                ".png",
+                ".jpg",
+                ".jpeg",
+                ".bmp",
+                ".gif"
+            };
+
+            return imagesTypes.Contains(ext.ToLower());
+        }
 
 
-		/// <summary>
-		/// Scrivo nel file
-		/// </summary>
-		/// <param name="filename"></param>
-		/// <param name="importObj"></param>
-		private static void WriteToFile(string filename, Import importObj)
-		{
-			XmlSerializer x = new XmlSerializer(typeof(Import));
-			TextWriter writer = new StreamWriter(filename, false);
-			x.Serialize(writer, importObj);
-		}
-	}
+        /// <summary>
+        /// Scrivo nel file
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <param name="importObj"></param>
+        private static void WriteToFile(string filename, Import importObj)
+        {
+            XmlSerializer x = new XmlSerializer(typeof(Import));
+            TextWriter writer = new StreamWriter(filename, false);
+            x.Serialize(writer, importObj);
+        }
+    }
 }
