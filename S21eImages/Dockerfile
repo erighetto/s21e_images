@@ -15,6 +15,28 @@ FROM build AS publish
 RUN dotnet publish "S21eImages.csproj" -c Release -o /app/publish
 
 FROM base AS final
+# Firefox browser to run the tests
+RUN apt-get update && apt-get install -y firefox-esr wget
+ 
+# Gecko Driver
+ENV GECKODRIVER_VERSION 0.27.0
+RUN wget --no-verbose -O /tmp/geckodriver.tar.gz https://github.com/mozilla/geckodriver/releases/download/v$GECKODRIVER_VERSION/geckodriver-v$GECKODRIVER_VERSION-linux64.tar.gz \
+  && rm -rf /opt/geckodriver \
+  && tar -C /opt -zxf /tmp/geckodriver.tar.gz \
+  && rm /tmp/geckodriver.tar.gz \
+  && mv /opt/geckodriver /opt/geckodriver-$GECKODRIVER_VERSION \
+  && chmod 755 /opt/geckodriver-$GECKODRIVER_VERSION \
+  && ln -fs /opt/geckodriver-$GECKODRIVER_VERSION /usr/bin/geckodriver \
+  && ln -fs /opt/geckodriver-$GECKODRIVER_VERSION /usr/bin/wires \
+  && apt-get clean \
+  && rm -rf /var/lib/apt/lists/* \
+  && rm -rf /var/cache/apt
+  
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "S21eImages.dll"]
+
+COPY docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
+
+#ENTRYPOINT ["/docker-entrypoint.sh"]
+ENTRYPOINT [ "dotnet", "S21eImages.dll", "scrape" ]
