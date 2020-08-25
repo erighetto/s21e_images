@@ -5,7 +5,6 @@ using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.Support.UI;
 using OpenQA.Selenium;
 using System.Collections.Generic;
-using Microsoft.Extensions.Configuration;
 using System.Drawing.Imaging;
 using System.Drawing;
 using DrawingImage = System.Drawing.Image;
@@ -24,11 +23,7 @@ namespace S21eImages
         public void Do()
         {
 
-            IConfiguration configuration = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json", true, true)
-                .Build();
-
-            string conf = configuration.GetSection("AppSetting")["DataPath"];
+            string conf = Environment.GetEnvironmentVariable("DATA_PATH");
             string path = Path.Combine(Path.GetDirectoryName(conf), "catalog_product_entity.json");
             string json = File.ReadAllText(path);
             DateTime time = new DateTime(2020, 12, 31, 23, 02, 03);
@@ -166,10 +161,8 @@ namespace S21eImages
 
             if (image != null)
             {
-                IConfiguration configuration = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json", true, true)
-                .Build();
-                string conf = configuration.GetSection("AppSetting")["AssetsPath"];
+
+                string conf = Environment.GetEnvironmentVariable("ASSETS_PATH");
                 string pathToFile = Path.Combine(Path.GetDirectoryName(conf), "product_images/" + filename);
 
                 if (ImageFormat.Jpeg.Equals(image.RawFormat))

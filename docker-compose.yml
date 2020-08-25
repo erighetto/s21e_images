@@ -12,3 +12,5 @@ services:
        - MYSQL_USER
        - MYSQL_PASSWORD
        - PROXY_11_KEY
+       - DATA_PATH
+       - ASSETS_PATH

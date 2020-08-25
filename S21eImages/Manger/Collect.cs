@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
-using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
 
@@ -16,11 +15,7 @@ namespace S21eImages
             try
             {
 
-                IConfiguration configuration = new ConfigurationBuilder()
-                    .AddJsonFile("appsettings.json", true, true)
-                    .Build();
-
-                string conf = configuration.GetSection("AppSetting")["DataPath"];
+                string conf = Environment.GetEnvironmentVariable("DATA_PATH");
                 string path = Path.Combine(Path.GetDirectoryName(conf), "catalog_product_entity.json");
                 string host = Environment.GetEnvironmentVariable("MYSQL_HOST");
                 string user = Environment.GetEnvironmentVariable("MYSQL_USER");

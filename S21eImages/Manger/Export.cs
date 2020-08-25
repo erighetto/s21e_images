@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.Extensions.Configuration;
 using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
@@ -12,11 +11,7 @@ namespace S21eImages
         public void Do()
         {
 
-            IConfiguration configuration = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json", true, true)
-                .Build();
-
-            string targetDirectory = configuration.GetSection("AppSetting")["AssetsPath"];
+            string targetDirectory = Environment.GetEnvironmentVariable("ASSETS_PATH");
             List<string> list = new List<string>();
 
             Import importObj = new Import
