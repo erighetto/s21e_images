@@ -4,13 +4,12 @@ using Microsoft.Extensions.Configuration;
 using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
-using ImagesExport.Model;
 
-namespace ImagesExport
+namespace S21eImages
 {
-	class Program
-	{
-		static void Main(string[] args)
+    public class Export : IExport
+    {
+		public void Do()
 		{
 
 			IConfiguration configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json", true, true).Build();
@@ -43,10 +42,10 @@ namespace ImagesExport
 								"small_image",
 								"thumbnail"
 							}
-                        }
+						}
 					};
 
-                    Simple itemObj = importObj.Simple.FirstOrDefault(x => x.Sku == sku);
+					Simple itemObj = importObj.Simple.FirstOrDefault(x => x.Sku == sku);
 					if (itemObj == null)
 					{
 						importObj.Simple.Add(new Simple
@@ -90,6 +89,7 @@ namespace ImagesExport
 
 			return imagesTypes.Contains(ext.ToLower());
 		}
+
 
 		/// <summary>
 		/// Scrivo nel file

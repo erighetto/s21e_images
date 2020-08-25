@@ -5,16 +5,16 @@ WORKDIR /app
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
-COPY ["src/ImagesCollect/ImagesCollect.csproj", "src/ImagesCollect/"]
-RUN dotnet restore "src/ImagesCollect/ImagesCollect.csproj"
+COPY S21eImages/S21eImages.csproj S21eImages/
+RUN dotnet restore "S21eImages/S21eImages.csproj"
 COPY . .
-WORKDIR "/src/src/ImagesCollect"
-RUN dotnet build "ImagesCollect.csproj" -c Release -o /app/build
+WORKDIR "/src/S21eImages"
+RUN dotnet build "S21eImages.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "ImagesCollect.csproj" -c Release -o /app/publish
+RUN dotnet publish "S21eImages.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "ImagesCollect.dll"]
+ENTRYPOINT ["dotnet", "S21eImages.dll"]

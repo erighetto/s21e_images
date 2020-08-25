@@ -1,7 +1,5 @@
 version: '3.4'
 services:
-  images_scrape:
+  is21e_images:
+    
 
-  images_collect:
-
-  images_export:

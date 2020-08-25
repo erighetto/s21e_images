@@ -1,18 +1,14 @@
 version: '3.4'
 
 services:
-  images_scrape:
-    image: ${DOCKER_REGISTRY-}imagesscrape
+
+  s21e_images:
+    image: ${DOCKER_REGISTRY-}s21eimages
     build:
       context: .
-      dockerfile: src/ImagesScrape/Dockerfile
-  images_export:
-    image: ${DOCKER_REGISTRY-}imagesexport
-    build:
-      context: .
-      dockerfile: src/ImagesExport/Dockerfile
-  images_collect:
-    image: ${DOCKER_REGISTRY-}imagescollect
-    build:
-      context: .
-      dockerfile: src/ImagesCollect/Dockerfile
+      dockerfile: S21eImages/Dockerfile
+    environment:
+       - MYSQL_HOST
+       - MYSQL_USER
+       - MYSQL_PASSWORD
+       - PROXY_11_KEY

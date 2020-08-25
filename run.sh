@@ -4,14 +4,13 @@ export $(egrep -v '^#' .env | xargs)
 
 WD=${PWD}
 
-cd "${WD}/src/ImagesCollect"
-dotnet run --configuration Release
+cd "${WD}/S21eImages"
+
+dotnet run --configuration Release -- collect
 wait
 
-cd "${WD}/src/ImagesScrape"
-dotnet run --configuration Release
+dotnet run --configuration Release -- scrape
 wait
 
-cd "${WD}/src/ImagesExport"
-dotnet run --configuration Release
+dotnet run --configuration Release -- export
 wait

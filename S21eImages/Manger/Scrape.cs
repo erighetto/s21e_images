@@ -16,12 +16,11 @@ using System;
 using System.Text;
 using RandomUserAgent;
 
-namespace ImagesScrape
+namespace S21eImages
 {
-    class Program
+    public class Scrape : IScrape
     {
-
-        public static void Main(string[] args)
+        public void Do()
         {
 
             IConfiguration configuration = new ConfigurationBuilder()
@@ -133,12 +132,12 @@ namespace ImagesScrape
                                 Console.WriteLine(image);
                                 SaveImage(image, sku + "_" + i + ".jpg", ImageFormat.Jpeg);
                             }
-                            
+
                         }
 
                     }
-                        
-                    
+
+
 
                 }
                 catch (Exception e)
@@ -221,6 +220,5 @@ namespace ImagesScrape
 
             return value.Ip + ":" + value.Port;
         }
-
     }
 }
