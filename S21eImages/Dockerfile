@@ -38,4 +38,6 @@ COPY --from=publish /app/publish .
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 RUN chmod +x /docker-entrypoint.sh
 
+RUN mkdir -p /root/.cache/dconf
+
 ENTRYPOINT ["/docker-entrypoint.sh"]

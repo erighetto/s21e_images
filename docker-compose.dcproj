@@ -4,6 +4,18 @@
     <ProjectVersion>2.1</ProjectVersion>
     <DockerTargetOS>Linux</DockerTargetOS>
     <ProjectGuid>e064769b-fd9e-44a0-89e2-fe2d297b7647</ProjectGuid>
+    <DockerLaunchBrowser>false</DockerLaunchBrowser>
+    <DockerServiceUrl></DockerServiceUrl>
+    <DockerServiceName></DockerServiceName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <CustomCommands>
+      <CustomCommands>
+        <Command>
+          <type>Custom</type>
+        </Command>
+      </CustomCommands>
+    </CustomCommands>
   </PropertyGroup>
   <ItemGroup>
     <None Include="docker-compose.override.yml">
