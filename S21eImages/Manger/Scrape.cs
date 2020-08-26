@@ -42,9 +42,10 @@ namespace S21eImages
             //options.Proxy = proxy;
             options.AddArgument("ignore-certificate-errors");
             options.AddArgument($"--user-agent={userAgent}");
+            options.AddArgument("--width=1366");
+            options.AddArgument("--height=768");
 
             using IWebDriver driver = new FirefoxDriver(options);
-            driver.Manage().Window.Maximize();
             WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
 
             try
