@@ -44,8 +44,12 @@ namespace S21eImages
             options.AddArgument($"--user-agent={userAgent}");
             options.AddArgument("--width=1366");
             options.AddArgument("--height=768");
+            options.SetPreference("dom.webdriver.enabled", false);
+            options.SetPreference("useAutomationExtension", false);
+
 
             using IWebDriver driver = new FirefoxDriver(options);
+
             WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
 
             try

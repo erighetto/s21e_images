@@ -15,8 +15,15 @@ FROM build AS publish
 RUN dotnet publish "S21eImages.csproj" -c Release -o /app/publish
 
 FROM base AS final
-# Firefox browser to run the tests
-RUN apt-get update && apt-get install -y firefox-esr wget curl xvfb
+# Add library to get Firefox work in headless context
+RUN apt-get update && apt-get install -y --allow-unauthenticated \
+    libc6-dev \
+    libgdiplus \
+    libx11-dev \
+    firefox-esr \
+    wget \
+    curl \
+    xvfb
  
 # Gecko Driver
 ENV GECKODRIVER_VERSION 0.27.0
