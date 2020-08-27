@@ -1,5 +1,4 @@
-﻿using Cookie = OpenQA.Selenium.Cookie;
-using ExpectedConditions = SeleniumExtras.WaitHelpers.ExpectedConditions;
+﻿using ExpectedConditions = SeleniumExtras.WaitHelpers.ExpectedConditions;
 using Newtonsoft.Json;
 using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.Support.UI;
@@ -54,33 +53,6 @@ namespace S21eImages
 
             try
             {
-
-                driver.Navigate().GoToUrl("https://www.cosicomodo.it");
-
-                driver.Manage().Cookies.AddCookie(new Cookie(
-                    "rbzid",
-                    "qRNV0kjQC7Jjolpkl0IuG8QD6P1JCCVcXVTYZKbEYPCnqrXFG+xNSgsweLIFBK+FyT5F06S0PWyidcOvYYgq57vEXLA3bTzjpl9WlWrTQnDCrf4hJ2OEDBQre672cDyBX7gMEjfS62L5mahqdPQQx0AclekiNnFPDbUnwN2JfKggYB/EIsqJPs6QHHZXy7l5prMGeCjZR95tpGgbO4jqya+rFHVTMxnqwkdXdvlxL+pqT2iz3zKUgXBJcGhHjggU",
-                    ".www.cosicomodo.it",
-                    "/",
-                    time
-                ));
-
-                driver.Manage().Cookies.AddCookie(new Cookie(
-                    "rbzsessionid",
-                    "906d5ae8fc4e6355a5145ad557448d68",
-                    ".www.cosicomodo.it",
-                    "/",
-                    time
-                ));
-
-                driver.Manage().Cookies.AddCookie(new Cookie(
-                    "cookies-disclaimer-v1",
-                    "true",
-                    "www.cosicomodo.it",
-                    "/",
-                    time
-                ));
-
 
                 CatalogProductEntities tblarticoliObj = JsonConvert.DeserializeObject<CatalogProductEntities>(json);
 
@@ -137,8 +109,6 @@ namespace S21eImages
                     }
 
                 }
-
-
 
             }
             catch (Exception e)
