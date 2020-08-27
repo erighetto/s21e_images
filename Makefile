@@ -6,7 +6,8 @@ default: build
 .PHONY: build
 build:
 	docker-compose build
-	docker push s21eimages:latest
+	docker tag $(shell docker images s21eimages:latest --format="{{.ID}}") erighetto/s21eimages:latest
+	docker push erighetto/s21eimages:latest
 
 
 ## run	:	Run with local enviroment.
