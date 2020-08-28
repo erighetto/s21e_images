@@ -12,7 +12,6 @@ using System.Linq;
 using System.Net;
 using System.Threading;
 using System;
-using System.Text;
 using RandomUserAgent;
 
 namespace S21eImages
@@ -25,20 +24,10 @@ namespace S21eImages
             string conf = Environment.GetEnvironmentVariable("DATA_PATH");
             string path = Path.Combine(Path.GetDirectoryName(conf), "catalog_product_entity.json");
             string json = File.ReadAllText(path);
-            DateTime time = new DateTime(2020, 12, 31, 23, 02, 03);
-
-            Proxy proxy = new Proxy
-            {
-                Kind = ProxyKind.Manual,
-                IsAutoDetect = false,
-                SslProxy = GetAvailableProxy()
-            };
-
             string userAgent = RandomUa.RandomUserAgent;
 
             FirefoxOptions options = new FirefoxOptions();
             options.AddArgument("--headless");
-            //options.Proxy = proxy;
             options.AddArgument("ignore-certificate-errors");
             options.AddArgument($"--user-agent={userAgent}");
             options.AddArgument("--width=1366");
@@ -46,9 +35,7 @@ namespace S21eImages
             options.SetPreference("dom.webdriver.enabled", false);
             options.SetPreference("useAutomationExtension", false);
 
-
             using IWebDriver driver = new FirefoxDriver(options);
-
             WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
 
             try
@@ -164,26 +151,6 @@ namespace S21eImages
             stream.Flush();
             stream.Close();
             client.Dispose();
-        }
-
-        /// <summary>
-        /// Get random proxy
-        /// </summary>
-        /// <returns></returns>
-        public static string GetAvailableProxy()
-        {
-            WebClient client = new WebClient();
-            string proxy11key = Environment.GetEnvironmentVariable("PROXY_11_KEY");
-            Stream stream = client.OpenRead($"https://proxy11.com/api/proxy.json?key={proxy11key}");
-            StreamReader reader = new StreamReader(stream, Encoding.UTF8);
-            string responseString = reader.ReadToEnd();
-
-            Proxies proxies = JsonConvert.DeserializeObject<Proxies>(responseString);
-            Random random = new Random();
-            int k = random.Next(0, proxies.Data.Count);
-            Datum value = proxies.Data[k];
-
-            return value.Ip + ":" + value.Port;
         }
     }
 }

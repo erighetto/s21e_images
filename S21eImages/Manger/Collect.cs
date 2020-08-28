@@ -53,6 +53,11 @@ namespace S21eImages
                 adapter.Fill(table);
 
                 string createText = JsonConvert.SerializeObject(table);
+
+                if (!File.Exists(path))
+                {
+                    File.CreateText(path);
+                }
                 File.WriteAllText(path, "{ \"catalog_product_entity\": " + createText + "}");
 
                 con.Close();

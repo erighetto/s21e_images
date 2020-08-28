@@ -96,6 +96,10 @@ namespace S21eImages
         /// <param name="importObj"></param>
         private static void WriteToFile(string filename, Import importObj)
         {
+            if (!File.Exists(filename))
+            {
+                File.CreateText(filename);
+            }
             XmlSerializer x = new XmlSerializer(typeof(Import));
             TextWriter writer = new StreamWriter(filename, false);
             x.Serialize(writer, importObj);
