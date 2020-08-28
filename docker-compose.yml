@@ -4,6 +4,7 @@ services:
 
   s21e_images:
     image: ${DOCKER_REGISTRY-}s21eimages
+    container_name: s21e_images
     build:
       context: .
       dockerfile: S21eImages/Dockerfile
