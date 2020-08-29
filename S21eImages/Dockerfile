@@ -6,7 +6,7 @@ WORKDIR /app
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
 COPY S21eImages/S21eImages.csproj S21eImages/
-RUN dotnet restore "S21eImages/S21eImages.csproj"
+RUN dotnet restore --disable-parallel "S21eImages/S21eImages.csproj"
 COPY . .
 WORKDIR "/src/S21eImages"
 RUN dotnet build "S21eImages.csproj" -c Release -o /app/build

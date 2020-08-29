@@ -7,6 +7,7 @@ namespace S21eImages
     {
         static void Main(string[] args)
         {
+
             // Test if input arguments were supplied.
             if (args.Length == 0)
             {
@@ -36,6 +37,7 @@ namespace S21eImages
                     Console.WriteLine("You say goodbye and I say hello.");
                 }
             }
+
         }
     }
 }

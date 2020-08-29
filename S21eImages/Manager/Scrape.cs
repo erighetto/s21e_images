@@ -28,7 +28,6 @@ namespace S21eImages
 
             FirefoxOptions options = new FirefoxOptions();
             options.AddArgument("--headless");
-            options.AddArgument("ignore-certificate-errors");
             options.AddArgument($"--user-agent={userAgent}");
             options.AddArgument("--width=1366");
             options.AddArgument("--height=768");
