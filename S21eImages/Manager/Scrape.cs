@@ -18,30 +18,22 @@ namespace S21eImages
 {
     public class Scrape : IScrape
     {
+
+        public IWebDriver driver;
+
         public void Do()
         {
 
             string conf = Environment.GetEnvironmentVariable("DATA_PATH");
             string path = Path.Combine(Path.GetDirectoryName(conf), "catalog_product_entity.json");
             string json = File.ReadAllText(path);
-            string userAgent = RandomUa.RandomUserAgent;
-
-            FirefoxOptions options = new FirefoxOptions();
-            options.AddArgument("--headless");
-            options.AddArgument($"--user-agent={userAgent}");
-            options.AddArgument("--width=1366");
-            options.AddArgument("--height=768");
-            options.SetPreference("dom.webdriver.enabled", false);
-            options.SetPreference("useAutomationExtension", false);
-
-            using IWebDriver driver = new FirefoxDriver(options);
-            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
 
             try
             {
 
                 CatalogProductEntities tblarticoliObj = JsonConvert.DeserializeObject<CatalogProductEntities>(json);
 
+                int rowSum = 0;
                 foreach (CatalogProductEntity element in tblarticoliObj.CatalogProductEntity.OrderBy(o => o.CodArt))
                 {
                     var sku = element.CodArt;
@@ -49,6 +41,7 @@ namespace S21eImages
                     var descr = element.DescArticolo;
                     if (string.IsNullOrEmpty(ean))
                     {
+                        rowSum++;
                         continue;
                     }
 
@@ -61,13 +54,23 @@ namespace S21eImages
                     Console.WriteLine($"Cerco l'articolo {sku}: {descr}");
                     string searchPageUrl = $"https://www.cosicomodo.it/spesa-online/ricerca?q={ean}";
 
+                    if (rowSum == 0 || rowSum % 25 == 0)
+                    {
+                        if (driver is IWebDriver)
+                        {
+                            driver.Close();
+                        }
 
+                        driver = InitBrowser();
+                    }
+                    WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
                     driver.Navigate().GoToUrl(searchPageUrl);
                     IWebElement firstResult = wait.Until(ExpectedConditions.ElementExists(By.CssSelector(".large-10 .listing")));
                     IList<IWebElement> links = firstResult.FindElements(By.TagName("a"));
 
                     if (links.Count() < 1)
                     {
+                        rowSum++;
                         continue;
                     }
 
@@ -75,6 +78,7 @@ namespace S21eImages
                     string productPageUrl = link.GetAttribute("href");
                     if (string.IsNullOrEmpty(productPageUrl))
                     {
+                        rowSum++;
                         continue;
                     }
                     Console.WriteLine(productPageUrl);
@@ -94,8 +98,9 @@ namespace S21eImages
 
                     }
 
+                    rowSum++;
                 }
-
+                
             }
             catch (Exception e)
             {
@@ -106,6 +111,27 @@ namespace S21eImages
                 Thread.Sleep(3000);
             }
 
+        }
+
+        /// <summary>
+        /// Inizializza il browser
+        /// </summary>
+        /// <returns></returns>
+        public static IWebDriver InitBrowser ()
+        {
+            string userAgent = RandomUa.RandomUserAgent;
+
+            FirefoxOptions options = new FirefoxOptions();
+            options.AddArgument("--headless");
+            options.AddArgument($"--user-agent={userAgent}");
+            options.AddArgument("--width=1366");
+            options.AddArgument("--height=768");
+            options.SetPreference("dom.webdriver.enabled", false);
+            options.SetPreference("useAutomationExtension", false);
+
+            IWebDriver driver = new FirefoxDriver(options);
+
+            return driver;
         }
 
         /// <summary>

@@ -9,7 +9,7 @@ services:
       context: .
       dockerfile: S21eImages/Dockerfile
       network: host
-    network_mode: "host"
+    network_mode: host
     ports:
       - 3306:3306
     environment:

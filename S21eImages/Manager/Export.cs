@@ -12,7 +12,6 @@ namespace S21eImages
         {
 
             string targetDirectory = Environment.GetEnvironmentVariable("ASSETS_PATH");
-            List<string> list = new List<string>();
 
             Import importObj = new Import
             {
