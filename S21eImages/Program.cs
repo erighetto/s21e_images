@@ -24,7 +24,8 @@ namespace S21eImages
                 if (args[0] == "collect")
                 {
                     var collect = serviceProvider.GetService<ICollect>();
-                    collect.Do();
+                    int.TryParse(args[1], out int range);
+                    collect.Do(range);
                 } else if (args[0] == "scrape") {
                     var scrape = serviceProvider.GetService<IScrape>();
                     scrape.Do();

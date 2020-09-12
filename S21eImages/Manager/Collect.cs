@@ -10,7 +10,7 @@ namespace S21eImages
 {
     public class Collect : ICollect
     {
-        public void Do()
+        public void Do(int range)
         {
             try
             {
@@ -26,15 +26,27 @@ namespace S21eImages
 
                 string[] items = GetMissingImages();
 
-                string sql = string.Format("SELECT TRIM(p.CodArt) as CodArt, ANY_VALUE(e.CodEAN) AS CodEan, ANY_VALUE(p.DescArticolo) AS DescArticolo " +
+                string sql = string.Empty;
+
+                if (range > 0)
+                {
+                    sql = string.Format("SELECT TRIM(p.CodArt) as CodArt, ANY_VALUE(e.CodEAN) AS CodEan, ANY_VALUE(p.DescArticolo) AS DescArticolo " +
                             "FROM tblarticolo p " +
                             "JOIN tblean e USING(CodArt) " +
                             "JOIN tbllistinovend l USING(CodArt) " +
                             "WHERE TRIM(p.CodArt) IN ({0}) " +
-                            "AND STR_TO_DATE(l.FlgDataUltimaModifica, '%d/%m/%Y') >= DATE_SUB(CURDATE(), INTERVAL 45 DAY)" +
+                            "AND STR_TO_DATE(l.FlgDataUltimaModifica, '%d/%m/%Y') >= DATE_SUB(CURDATE(), INTERVAL {1} DAY)" +
+                            "GROUP BY TRIM(p.CodArt) " +
+                            "ORDER BY TRIM(p.CodArt)", string.Join(", ", items.Select(x => "?")), range);
+                } else
+                {
+                    sql = string.Format("SELECT TRIM(p.CodArt) as CodArt, ANY_VALUE(e.CodEAN) AS CodEan, ANY_VALUE(p.DescArticolo) AS DescArticolo " +
+                            "FROM tblarticolo p " +
+                            "JOIN tblean e USING(CodArt) " +
+                            "WHERE TRIM(p.CodArt) IN ({0}) " +
                             "GROUP BY TRIM(p.CodArt) " +
                             "ORDER BY TRIM(p.CodArt)", string.Join(", ", items.Select(x => "?")));
-
+                }
 
                 using var con = new MySqlConnection(cs);
                 con.Open();

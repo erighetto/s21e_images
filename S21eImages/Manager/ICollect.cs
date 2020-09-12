@@ -4,6 +4,6 @@ namespace S21eImages
 {
     public interface ICollect
     {
-        void Do();
+        void Do(int range);
     }
 }

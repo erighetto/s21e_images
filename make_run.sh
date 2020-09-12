@@ -3,7 +3,7 @@
 ## Run with local enviroment.
 export $(egrep -v '^#' .env | xargs)
 cd "$(PWD)/S21eImages"
-dotnet run --configuration Release -- collect
+dotnet run --configuration Release -- collect all
 wait
 dotnet run --configuration Release -- scrape
 wait

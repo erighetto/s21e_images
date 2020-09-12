@@ -10,7 +10,7 @@ Xvfb :20 -screen 0 1366x768x16 -nolisten tcp -nolisten unix &
 
 cd /app
 
-dotnet S21eImages.dll collect
+dotnet S21eImages.dll collect 45
 
 dotnet S21eImages.dll scrape
 
