@@ -6,7 +6,7 @@ using System.Linq;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
 
-namespace S21eImages
+namespace S21eImages.Manager
 {
     public class Collect : ICollect
     {

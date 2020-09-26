@@ -13,8 +13,9 @@ using System.Net;
 using System.Threading;
 using System;
 using RandomUserAgent;
+using S21eImages.Model;
 
-namespace S21eImages
+namespace S21eImages.Manager
 {
     public class Scrape : IScrape
     {
@@ -45,11 +46,34 @@ namespace S21eImages
                         continue;
                     }
 
-                    //int.TryParse(sku, out int number);
-                    //if (number < 68522895)
-                    //{
-                    //    continue;
-                    //}
+                    int.TryParse(sku, out int number);
+                    if (number < 1870807)
+                    {
+                        continue;
+                    }
+
+                    using (var db = new SQLiteDBContext())
+                    {
+
+                        var product = db.Products
+                            .Where(b => b.Sku == sku)
+                            .FirstOrDefault();
+
+                        if (product is null)
+                        {
+                            db.Products.Add(new Products { Sku = sku, Attempts = 1 });
+                            db.SaveChanges();
+                        } else
+                        {
+                            if (product.Attempts < 100)
+                            {
+                                product.Attempts += 1;
+                                db.SaveChanges();
+                            }
+                            else continue;
+                        }
+
+                    }
 
                     Console.WriteLine($"Cerco l'articolo {sku}: {descr}");
                     string searchPageUrl = $"https://www.cosicomodo.it/spesa-online/ricerca?q={ean}";
@@ -65,7 +89,7 @@ namespace S21eImages
                     }
                     WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
                     driver.Navigate().GoToUrl(searchPageUrl);
-                    IWebElement firstResult = wait.Until(ExpectedConditions.ElementExists(By.CssSelector(".large-10 .listing")));
+                    IWebElement firstResult = wait.Until(ExpectedConditions.ElementExists(By.CssSelector(".dobody-container .listing")));
                     IList<IWebElement> links = firstResult.FindElements(By.TagName("a"));
 
                     if (links.Count() < 1)

@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
+using S21eImages.Model;
 
-namespace S21eImages
+namespace S21eImages.Manager
 {
     public class Export : IExport
     {

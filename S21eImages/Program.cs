@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
+using S21eImages.Manager;
 
 namespace S21eImages
 {
