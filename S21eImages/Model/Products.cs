@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace S21eImages.Model
+﻿namespace S21eImages.Model
 {
     public class Products
     {

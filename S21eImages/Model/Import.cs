@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Xml.Serialization;
 
 namespace S21eImages.Model
 {
-	[XmlRoot(ElementName = "gallery_information")]
+    [XmlRoot(ElementName = "gallery_information")]
 	public class GalleryInformation
 	{
 		[XmlAttribute(AttributeName = "label")]

@@ -46,11 +46,11 @@ namespace S21eImages.Manager
                         continue;
                     }
 
-                    int.TryParse(sku, out int number);
-                    if (number < 1870807)
-                    {
-                        continue;
-                    }
+                    //int.TryParse(sku, out int number);
+                    //if (number < 253810633)
+                    //{
+                    //    continue;
+                    //}
 
                     using (var db = new SQLiteDBContext())
                     {
