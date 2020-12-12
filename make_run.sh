@@ -13,21 +13,21 @@ echo "Run with $target enviroment"
 ## Run with local enviroment.
 if [ "$target" == "local" ]
 then
-export $(egrep -v '^#' .env | xargs)
-cd "$(PWD)/S21eImages"
-dotnet ef database update
-wait
-dotnet run --configuration Release -- collect 60
-wait
-dotnet run --configuration Release -- scrape
-wait
-dotnet run --configuration Release -- export
-wait
+    export $(egrep -v '^#' .env | xargs)
+    cd "$(PWD)/S21eImages"
+    dotnet ef database update
+    wait
+    dotnet run --configuration Release -- collect 60
+    wait
+    dotnet run --configuration Release -- scrape
+    wait
+    dotnet run --configuration Release -- export
+    wait
 fi
 
 ## Run with container enviroment.
 if [ "$target" == "container" ]
 then
-docker-compose build
-docker-compose up
+    docker-compose build
+    docker-compose up
 fi
