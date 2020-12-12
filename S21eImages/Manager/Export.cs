@@ -49,6 +49,10 @@ namespace S21eImages.Manager
                         importObj.Simple.Add(new Simple
                         {
                             Sku = sku,
+                            Global = new Global
+                            {
+                                Status = "1"
+                            },
                             Images = new Images
                             {
                                 Image = new List<Image> {

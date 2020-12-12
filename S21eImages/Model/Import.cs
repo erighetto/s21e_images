@@ -21,6 +21,8 @@ namespace S21eImages.Model
 		public List<string> Role { get; set; }
 		[XmlElement(ElementName = "gallery_information")]
 		public GalleryInformation GalleryInformation { get; set; }
+		[XmlElement(ElementName = "status")]
+		public string Status { get; set; }
 	}
 
 	[XmlRoot(ElementName = "image")]
@@ -44,6 +46,8 @@ namespace S21eImages.Model
 	[XmlRoot(ElementName = "simple")]
 	public class Simple
 	{
+		[XmlElement(ElementName = "global")]
+		public Global Global { get; set; }
 		[XmlElement(ElementName = "images")]
 		public Images Images { get; set; }
 		[XmlAttribute(AttributeName = "sku")]
