@@ -17,7 +17,7 @@ then
     cd "$(PWD)/S21eImages"
     dotnet ef database update
     wait
-    dotnet run --configuration Release -- collect 60
+    dotnet run --configuration Release -- collect ${RANGE}
     wait
     dotnet run --configuration Release -- scrape
     wait
