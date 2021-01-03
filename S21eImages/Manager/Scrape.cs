@@ -1,4 +1,5 @@
 ﻿using ExpectedConditions = SeleniumExtras.WaitHelpers.ExpectedConditions;
+using Cookie = OpenQA.Selenium.Cookie;
 using Newtonsoft.Json;
 using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.Support.UI;
@@ -75,20 +76,63 @@ namespace S21eImages.Manager
 
                     }
 
-                    Console.WriteLine($"Cerco l'articolo {sku}: {descr}");
-                    string searchPageUrl = $"https://www.cosicomodo.it/spesa-online/ricerca?q={ean}";
-
-                    if (rowSum == 0 || rowSum % 25 == 0)
+                    if (rowSum % 25 == 0)
                     {
                         if (driver is IWebDriver)
                         {
                             driver.Close();
                         }
 
+                        DateTime time = DateTime.Now.AddYears(1);
                         driver = InitBrowser();
+                        driver.Navigate().GoToUrl("https://www.cosicomodo.it");
+                        driver.Manage().Cookies.AddCookie(new Cookie(
+                            "cosicomodo_provisionalcap",
+                            "\"37030 - Montecchia di Crosara\"",
+                            "www.cosicomodo.it",
+                            "/",
+                            time
+                        ));
+
+                        driver.Manage().Cookies.AddCookie(new Cookie(
+                            "familanord_anonymous_preferred_base_store",
+                            "MAXIDI_FAMILA_019861",
+                            "www.cosicomodo.it",
+                            "/",
+                            time
+                        ));
+
+                        driver.Manage().Cookies.AddCookie(new Cookie(
+                            "familanord_provisionalcap",
+                            "\"37030 - Montecchia di Crosara\"",
+                            "www.cosicomodo.it",
+                            "/",
+                            time
+                        ));
+
+                        driver.Manage().Cookies.AddCookie(new Cookie(
+                            "is_provisionalcap_from_aggregator",
+                            "true",
+                            "www.cosicomodo.it",
+                            "/",
+                            time
+                        ));
+
+                        driver.Manage().Cookies.AddCookie(new Cookie(
+                            "cookies-disclaimer-v1",
+                            "true",
+                            "www.cosicomodo.it",
+                            "/",
+                            time
+                        ));
                     }
+
+                    
+                    Console.WriteLine($"Cerco l'articolo {sku}: {descr}");
+                    string searchPageUrl = $"https://www.cosicomodo.it/familanord/san-bonifacio-villanova/ricerca?q={ean}";
                     WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
                     driver.Navigate().GoToUrl(searchPageUrl);
+
                     IWebElement firstResult = wait.Until(ExpectedConditions.ElementExists(By.CssSelector(".dobody-container .listing")));
                     IList<IWebElement> links = firstResult.FindElements(By.TagName("a"));
 
@@ -146,7 +190,7 @@ namespace S21eImages.Manager
             string userAgent = RandomUa.RandomUserAgent;
 
             FirefoxOptions options = new FirefoxOptions();
-            options.AddArgument("--headless");
+            //options.AddArgument("--headless");
             options.AddArgument($"--user-agent={userAgent}");
             options.AddArgument("--width=1366");
             options.AddArgument("--height=768");
