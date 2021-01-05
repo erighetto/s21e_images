@@ -80,6 +80,7 @@ namespace S21eImages.Manager
                     {
                         if (driver is IWebDriver)
                         {
+                            driver.Manage().Cookies.DeleteAllCookies();
                             driver.Close();
                         }
 
@@ -130,7 +131,7 @@ namespace S21eImages.Manager
                     
                     Console.WriteLine($"Cerco l'articolo {sku}: {descr}");
                     string searchPageUrl = $"https://www.cosicomodo.it/familanord/san-bonifacio-villanova/ricerca?q={ean}";
-                    WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+                    WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(25));
                     driver.Navigate().GoToUrl(searchPageUrl);
 
                     IWebElement firstResult = wait.Until(ExpectedConditions.ElementExists(By.CssSelector(".dobody-container .listing")));
@@ -190,7 +191,7 @@ namespace S21eImages.Manager
             string userAgent = RandomUa.RandomUserAgent;
 
             FirefoxOptions options = new FirefoxOptions();
-            //options.AddArgument("--headless");
+            options.AddArgument("--headless");
             options.AddArgument($"--user-agent={userAgent}");
             options.AddArgument("--width=1366");
             options.AddArgument("--height=768");
