@@ -18,3 +18,4 @@ services:
        - MYSQL_PASSWORD
        - DATA_PATH
        - ASSETS_PATH
+       - RANGE

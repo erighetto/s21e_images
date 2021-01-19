@@ -21,13 +21,13 @@ namespace S21eImages.Manager
     public class Scrape : IScrape
     {
 
-        public IWebDriver driver;
+        private IWebDriver _driver;
 
         public void Do()
         {
 
             string conf = Environment.GetEnvironmentVariable("DATA_PATH");
-            string path = Path.Combine(Path.GetDirectoryName(conf), "catalog_product_entity.json");
+            string path = Path.Combine(Path.GetDirectoryName(conf) ?? throw new NullReferenceException("data path is null"), "catalog_product_entity.json");
             string json = File.ReadAllText(path);
 
             try
@@ -41,24 +41,23 @@ namespace S21eImages.Manager
                     var sku = element.CodArt;
                     var ean = element.CodEan;
                     var descr = element.DescArticolo;
+
                     if (string.IsNullOrEmpty(ean))
                     {
-                        rowSum++;
                         continue;
                     }
 
-                    //int.TryParse(sku, out int number);
-                    //if (number < 253810633)
-                    //{
-                    //    continue;
-                    //}
+                    int.TryParse(sku, out int n);
+                    if (n < getLastItem())
+                    {
+                        continue;
+                    }
 
                     using (var db = new SQLiteDBContext())
                     {
 
                         var product = db.Products
-                            .Where(b => b.Sku == sku)
-                            .FirstOrDefault();
+                            .FirstOrDefault(b => b.Sku == sku);
 
                         if (product is null)
                         {
@@ -78,16 +77,16 @@ namespace S21eImages.Manager
 
                     if (rowSum % 25 == 0)
                     {
-                        if (driver is IWebDriver)
+                        if (_driver is IWebDriver)
                         {
-                            driver.Manage().Cookies.DeleteAllCookies();
-                            driver.Close();
+                            _driver.Manage().Cookies.DeleteAllCookies();
+                            _driver.Close();
                         }
 
                         DateTime time = DateTime.Now.AddYears(1);
-                        driver = InitBrowser();
-                        driver.Navigate().GoToUrl("https://www.cosicomodo.it");
-                        driver.Manage().Cookies.AddCookie(new Cookie(
+                        _driver = InitBrowser();
+                        _driver.Navigate().GoToUrl("https://www.cosicomodo.it");
+                        _driver.Manage().Cookies.AddCookie(new Cookie(
                             "cosicomodo_provisionalcap",
                             "\"37030 - Montecchia di Crosara\"",
                             "www.cosicomodo.it",
@@ -95,7 +94,7 @@ namespace S21eImages.Manager
                             time
                         ));
 
-                        driver.Manage().Cookies.AddCookie(new Cookie(
+                        _driver.Manage().Cookies.AddCookie(new Cookie(
                             "familanord_anonymous_preferred_base_store",
                             "MAXIDI_FAMILA_019861",
                             "www.cosicomodo.it",
@@ -103,7 +102,7 @@ namespace S21eImages.Manager
                             time
                         ));
 
-                        driver.Manage().Cookies.AddCookie(new Cookie(
+                        _driver.Manage().Cookies.AddCookie(new Cookie(
                             "familanord_provisionalcap",
                             "\"37030 - Montecchia di Crosara\"",
                             "www.cosicomodo.it",
@@ -111,7 +110,7 @@ namespace S21eImages.Manager
                             time
                         ));
 
-                        driver.Manage().Cookies.AddCookie(new Cookie(
+                        _driver.Manage().Cookies.AddCookie(new Cookie(
                             "is_provisionalcap_from_aggregator",
                             "true",
                             "www.cosicomodo.it",
@@ -119,7 +118,7 @@ namespace S21eImages.Manager
                             time
                         ));
 
-                        driver.Manage().Cookies.AddCookie(new Cookie(
+                        _driver.Manage().Cookies.AddCookie(new Cookie(
                             "cookies-disclaimer-v1",
                             "true",
                             "www.cosicomodo.it",
@@ -131,13 +130,13 @@ namespace S21eImages.Manager
                     
                     Console.WriteLine($"Cerco l'articolo {sku}: {descr}");
                     string searchPageUrl = $"https://www.cosicomodo.it/familanord/san-bonifacio-villanova/ricerca?q={ean}";
-                    WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(25));
-                    driver.Navigate().GoToUrl(searchPageUrl);
+                    WebDriverWait wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(25));
+                    _driver.Navigate().GoToUrl(searchPageUrl);
 
                     IWebElement firstResult = wait.Until(ExpectedConditions.ElementExists(By.CssSelector(".dobody-container .listing")));
                     IList<IWebElement> links = firstResult.FindElements(By.TagName("a"));
 
-                    if (links.Count() < 1)
+                    if (!links.Any())
                     {
                         rowSum++;
                         continue;
@@ -152,19 +151,16 @@ namespace S21eImages.Manager
                     }
                     Console.WriteLine(productPageUrl);
 
-                    driver.Navigate().GoToUrl(productPageUrl);
+                    _driver.Navigate().GoToUrl(productPageUrl);
                     IWebElement secondResult = wait.Until(ExpectedConditions.ElementExists(By.CssSelector(".image-container")));
                     IList<IWebElement> images = secondResult.FindElements(By.CssSelector(".image-container .slick-slide a.mfp-zoom"));
 
                     for (int i = 0; i < images.Count() && i < 5; i++)
                     {
                         string image = images.ElementAt(i).GetAttribute("href");
-                        if (!string.IsNullOrEmpty(image))
-                        {
-                            Console.WriteLine(image);
-                            SaveImage(image, sku + "_" + i + ".jpg", ImageFormat.Jpeg);
-                        }
-
+                        if (string.IsNullOrEmpty(image)) continue;
+                        Console.WriteLine(image);
+                        SaveImage(image, sku + "_" + i + ".jpg", ImageFormat.Jpeg);
                     }
 
                     rowSum++;
@@ -186,7 +182,7 @@ namespace S21eImages.Manager
         /// Inizializza il browser
         /// </summary>
         /// <returns></returns>
-        public static IWebDriver InitBrowser ()
+        private static IWebDriver InitBrowser ()
         {
             string userAgent = RandomUa.RandomUserAgent;
 
@@ -204,22 +200,41 @@ namespace S21eImages.Manager
         }
 
         /// <summary>
+        /// controlla la presenza di immagini già scaricate
+        /// </summary>
+        /// <returns>int</returns>
+        private int getLastItem()
+        {
+
+            string targetDirectory = Environment.GetEnvironmentVariable("ASSETS_PATH");
+            string fileEntry = Directory.GetFiles(Path.Combine(targetDirectory, "product_images"))
+                        .OrderByDescending(d => d)
+                        .ToArray()
+                        .First();
+            string fileName = Path.GetFileName(fileEntry);
+            string sku = fileName.Split('_')[0];
+            int.TryParse(sku, out int j);
+
+            return j;
+        }
+
+        /// <summary>
         /// Salvataggio delle immagini
         /// </summary>
         /// <param name="imageUrl"></param>
         /// <param name="filename"></param>
         /// <param name="format"></param>
-        public static void SaveImage(string imageUrl, string filename, ImageFormat format)
+        private static void SaveImage(string imageUrl, string filename, ImageFormat format)
         {
             WebClient client = new WebClient();
             Stream stream = client.OpenRead(imageUrl);
-            DrawingImage image = DrawingImage.FromStream(stream);
+            DrawingImage image = DrawingImage.FromStream(stream ?? throw new NullReferenceException("stream is null"));
 
             if (image != null)
             {
 
                 string conf = Environment.GetEnvironmentVariable("ASSETS_PATH");
-                string pathToFile = Path.Combine(Path.GetDirectoryName(conf), "product_images/" + filename);
+                string pathToFile = Path.Combine(Path.GetDirectoryName(conf) ?? throw new NullReferenceException("assets path is null"), "product_images/" + filename);
 
                 if (ImageFormat.Jpeg.Equals(image.RawFormat))
                 {
