@@ -48,7 +48,7 @@ namespace S21eImages.Manager
                     }
 
                     int.TryParse(sku, out int n);
-                    if (n < getLastItem())
+                    if (n < GetLastItem())
                     {
                         continue;
                     }
@@ -59,15 +59,19 @@ namespace S21eImages.Manager
                         var product = db.Products
                             .FirstOrDefault(b => b.Sku == sku);
 
+                        DateTime foo = DateTime.Today;
+                        int unixTime = Convert.ToInt32(((DateTimeOffset)foo).ToUnixTimeSeconds());
+
                         if (product is null)
                         {
-                            db.Products.Add(new Products { Sku = sku, Attempts = 1 });
+                            db.Products.Add(new Products { Sku = sku, Attempts = 1, UpdatedAt = unixTime });
                             db.SaveChanges();
                         } else
                         {
-                            if (product.Attempts < 100)
+                            if (product.Attempts < 100 && product.UpdatedAt < unixTime)
                             {
                                 product.Attempts += 1;
+                                product.UpdatedAt = unixTime;
                                 db.SaveChanges();
                             }
                             else continue;
@@ -203,7 +207,7 @@ namespace S21eImages.Manager
         /// controlla la presenza di immagini già scaricate
         /// </summary>
         /// <returns>int</returns>
-        private int getLastItem()
+        private int GetLastItem()
         {
 
             string targetDirectory = Environment.GetEnvironmentVariable("ASSETS_PATH");
