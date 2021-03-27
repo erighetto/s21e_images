@@ -28,6 +28,6 @@ fi
 ## Run with container enviroment.
 if [ "$target" == "container" ]
 then
-    docker-compose build
+    ##docker-compose build
     docker-compose up
 fi
